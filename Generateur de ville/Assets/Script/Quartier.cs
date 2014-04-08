@@ -45,6 +45,11 @@ public class Position {
 		this.x = _x;
 		this.y = _y;
 	}
+
+	public Position(){
+		this.x = 0;
+		this.y = 0;
+	}
 	
 	bool Equals(Position compared){
 		if(compared.x == this.x && compared.y == this.y){

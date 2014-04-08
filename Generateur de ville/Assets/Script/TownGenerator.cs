@@ -53,8 +53,11 @@ public class TownGenerator : MonoBehaviour {
 			//parcours total jusqu'a interuption de la route
 			while(_roading){
 
+				Debug.Log("_ActualPosition before = "+ _ActualPosition.x);
 				//aleatoiriser une direction
-				_NewPosition = NewRoad(_ActualPosition, _TownTable);
+				_NewPosition = NewRoad( _ActualPosition, _TownTable );
+				Debug.Log("_NewPosition = "+ _NewPosition.x);
+				Debug.Log("_ActualPosition after = "+ _ActualPosition.x);
 
 				//si la position n'as pas changée on stop le roading sinon on road
 				if( _NewPosition.Equals(_ActualPosition) ){
@@ -106,67 +109,80 @@ public class TownGenerator : MonoBehaviour {
 	
 	#region fonction de tracé de route
 	//fonction qui envoi la position de la poursuite de la route
-	Position NewRoad(Position _AP  , int[,] _TownTable){	// _Ap for actual position
-
+	public Position NewRoad(Position _AP  , int[,] _TownTable){
 
 		int _newdirection;
+		bool _inBounds = true;
+		Position _NewPosition = new Position(_AP.x,_AP.y);
 
-		bool _direction_is_correct = false;
+		_newdirection = (int)Random.Range(1,4);
+		Debug.Log("direction : "+_newdirection);
 
-		while(_direction_is_correct == false){	// * 1 : N		* 2 : E 	* 3 : S		* 4 : W
-
-			_newdirection = (int)Random.Range(1,4);
-			//verification que la direction est bonne
-			Debug.Log("new direction : "+_newdirection);
-
-			if(_newdirection == 1){
+		//verification que la direction est bonne
+		if(_newdirection == 1){
+			if(_AP.x-1 >= 0 ){
 				if((_TownTable[		_AP.x-1,	_AP.y-1 ] 	!= -1000 && _TownTable[	_AP.x-1,	_AP.y-1 ] 	!= 1 ) &&
 				   (_TownTable[		_AP.x-1,	_AP.y 	] 	!= -1000 && _TownTable[	_AP.x-1,	_AP.y+1 ] 	!= 1 ) &&
 				   (_TownTable[		_AP.x-1,	_AP.y +1] 	!= -1000 && _TownTable[	_AP.x-1,	_AP.y 	] 	!= 1 ) 
 				   ){
 
 					Debug.Log("New Direction North");
-					_AP.x = _AP.x - 1;
-					_direction_is_correct = true;
+					_NewPosition.x = _NewPosition.x - 1;
 				}
 			}
-			else if(_newdirection == 2){
+			else{
+				Debug.Log ("out of bounds exception : "+ _AP.x);
+				return _AP;
+			}
+		}
+		if(_newdirection == 2){
+			if(_AP.y+1 < 100){	//taille tableau
 				if(	(_TownTable[	_AP.x+1,	_AP.y+1 ] 	!= -1000 && _TownTable[_AP.x+1,	_AP.y+1 ] 	!= 1 ) &&
 				   	(_TownTable[	_AP.x,		_AP.y+1 ] 	!= -1000 && _TownTable[_AP.x,	_AP.y+1 ] 	!= 1 ) &&
 			   		(_TownTable[	_AP.x-1,	_AP.y+1 ] 	!= -1000 && _TownTable[_AP.x-1,	_AP.y+1 ] 	!= 1 ) ){
 
 					Debug.Log("New Direction  East");
-					_AP.y = _AP.y + 1;
-					_direction_is_correct = true;
+					_NewPosition.y = _NewPosition.y + 1;
 				}
 			}
-			else if(_newdirection == 3){
+			else{
+				Debug.Log ("out of bounds exception : "+ _AP.y);
+				return _AP;
+			}
+		}
+		if(_newdirection == 3){
+			if(_AP.x+1 < 100){
 				if((_TownTable[		_AP.x+1,	_AP.y+1 ] 	!= -1000 && _TownTable[_AP.x+1,	_AP.y+1 ] 	!= 1 ) &&
 				   (_TownTable[		_AP.x+1,	_AP.y 	] 	!= -1000 && _TownTable[_AP.x+1,	_AP.y 	] 	!= 1 ) &&
 				   (_TownTable[		_AP.x-1,	_AP.y-1 ] 	!= -1000 && _TownTable[_AP.x-1,	_AP.y-1 ]	!= 1 ) ){
 
 					Debug.Log("New Direction South");
-					_AP.x = _AP.x + 1;
-					_direction_is_correct = true;
+					_NewPosition.x = _NewPosition.x + 1;
 				}
 			}
-			else if(_newdirection == 4){
+			else{
+				Debug.Log ("out of bounds exception : "+ _AP.x);
+				return _AP;
+			}
+		}
+		if(_newdirection == 4){
+			if(_AP.y-1 >= 0){
 				if((_TownTable[		_AP.x+1,	_AP.y-1 ] 	!= -1000 && _TownTable[_AP.x+1,	_AP.y-1 ] 	!= 1 ) &&
 				   (_TownTable[		_AP.x,		_AP.y-1 ] 	!= -1000 && _TownTable[_AP.x,	_AP.y-1 ] 	!= 1 ) &&
 				   (_TownTable[		_AP.x-1,	_AP.y-1 ] 	!= -1000 && _TownTable[_AP.x-1,	_AP.y-1 ] 	!= 1 ) ){
 
 					Debug.Log("New Direction West");
-					_AP.y = _AP.y - 1;
-					_direction_is_correct = true;
+					_NewPosition.y = _NewPosition.y - 1;
 				}
 			}
 			else{
-				Debug.Log("erreur : code direction, TownGenerator");
+				Debug.Log ("out of bounds exception : "+ _AP.y);
+				return _AP;
 			}
 		}
 
 		//deplacer la position actuelle a la nouvelle position
-		return _AP;
+		return _NewPosition;
 	}
 	#endregion
 
