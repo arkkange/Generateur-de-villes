@@ -40,7 +40,7 @@ public class TownGenerator : MonoBehaviour {
 		Position _NewPosition= new Position(_centre);
 
 		//creation of the Roads
-		for(int j = 0; j<1 ; j++){
+		for(int j = 0; j<4 ; j++){
 			//recupération du centre et initialisation du booleen
 			_ActualPosition.SetPosition(_centre);
 			_NewPosition.SetPosition(_ActualPosition);
