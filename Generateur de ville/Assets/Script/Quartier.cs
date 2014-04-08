@@ -50,14 +50,29 @@ public class Position {
 		this.x = 0;
 		this.y = 0;
 	}
+
+	public Position(Position P){
+		this.x = P.x;
+		this.y = P.y;
+	}
 	
-	bool Equals(Position compared){
-		if(compared.x == this.x && compared.y == this.y){
+	public bool Equals(Position p){
+		if( (p.x == this.x) && (p.y == this.y) ){
 			return true;
 		}
 		else{
 			return false;
 		}
+	}
+
+	public void SetPosition(Position p){
+		this.x = p.x;
+		this.y = p.y;
+	}
+
+	public void SetPosition(int i, int j){
+		this.x = i;
+		this.y = j;
 	}
 	
 }
