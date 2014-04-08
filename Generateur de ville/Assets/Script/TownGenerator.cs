@@ -33,11 +33,7 @@ public class TownGenerator : MonoBehaviour {
 		_TownTable = new int[taille,taille];
 		_TownTable = TableIntitialisation(taille);
 
-		int x;
-		int y;
-		int _next_way;
 		bool _roading;
-		bool _direction;
 
 		Position _centre = new Position(taille/2,taille/2);
 		Position _ActualPosition;
@@ -53,11 +49,8 @@ public class TownGenerator : MonoBehaviour {
 			//parcours total jusqu'a interuption de la route
 			while(_roading){
 
-				Debug.Log("_ActualPosition before = "+ _ActualPosition.x);
 				//aleatoiriser une direction
 				_NewPosition = NewRoad( _ActualPosition, _TownTable );
-				Debug.Log("_NewPosition = "+ _NewPosition.x);
-				Debug.Log("_ActualPosition after = "+ _ActualPosition.x);
 
 				//si la position n'as pas changée on stop le roading sinon on road
 				if( _NewPosition.Equals(_ActualPosition) ){
@@ -110,13 +103,11 @@ public class TownGenerator : MonoBehaviour {
 	#region fonction de tracé de route
 	//fonction qui envoi la position de la poursuite de la route
 	public Position NewRoad(Position _AP  , int[,] _TownTable){
-
+		/*
 		int _newdirection;
-		bool _inBounds = true;
 		Position _NewPosition = new Position(_AP.x,_AP.y);
 
 		_newdirection = (int)Random.Range(1,4);
-		Debug.Log("direction : "+_newdirection);
 
 		//verification que la direction est bonne
 		if(_newdirection == 1){
@@ -126,12 +117,12 @@ public class TownGenerator : MonoBehaviour {
 				   (_TownTable[		_AP.x-1,	_AP.y +1] 	!= -1000 && _TownTable[	_AP.x-1,	_AP.y 	] 	!= 1 ) 
 				   ){
 
-					Debug.Log("New Direction North");
+					//Debug.Log("New Direction North");
 					_NewPosition.x = _NewPosition.x - 1;
 				}
 			}
 			else{
-				Debug.Log ("out of bounds exception : "+ _AP.x);
+				//Debug.Log ("out of bounds exception : "+ _AP.x);
 				return _AP;
 			}
 		}
@@ -146,7 +137,7 @@ public class TownGenerator : MonoBehaviour {
 				}
 			}
 			else{
-				Debug.Log ("out of bounds exception : "+ _AP.y);
+				//Debug.Log ("out of bounds exception : "+ _AP.y);
 				return _AP;
 			}
 		}
@@ -161,7 +152,7 @@ public class TownGenerator : MonoBehaviour {
 				}
 			}
 			else{
-				Debug.Log ("out of bounds exception : "+ _AP.x);
+				//Debug.Log ("out of bounds exception : "+ _AP.x);
 				return _AP;
 			}
 		}
@@ -171,7 +162,7 @@ public class TownGenerator : MonoBehaviour {
 				   (_TownTable[		_AP.x,		_AP.y-1 ] 	!= -1000 && _TownTable[_AP.x,	_AP.y-1 ] 	!= 1 ) &&
 				   (_TownTable[		_AP.x-1,	_AP.y-1 ] 	!= -1000 && _TownTable[_AP.x-1,	_AP.y-1 ] 	!= 1 ) ){
 
-					Debug.Log("New Direction West");
+					//Debug.Log("New Direction West");
 					_NewPosition.y = _NewPosition.y - 1;
 				}
 			}
@@ -180,6 +171,7 @@ public class TownGenerator : MonoBehaviour {
 				return _AP;
 			}
 		}
+		*/
 
 		//deplacer la position actuelle a la nouvelle position
 		return _NewPosition;
