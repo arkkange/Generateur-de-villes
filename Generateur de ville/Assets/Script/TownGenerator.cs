@@ -148,6 +148,7 @@ public class TownGenerator : MonoBehaviour {
 					   (_TownTable[		_NewPosition.x-1,	_NewPosition.y +1	] 	!= -1000 && _TownTable[	_NewPosition.x-1,	_NewPosition.y+1	] 	!= 1 ) )
 					{
 						_NewPosition.x = _NewPosition.x - 1;
+						no_path = true;
 					}
 					else{
 						N_Iscorrect = false;
@@ -169,6 +170,7 @@ public class TownGenerator : MonoBehaviour {
 				   		(_TownTable[	_NewPosition.x-1,	_NewPosition.y+1 ] 	!= -1000 && _TownTable[_NewPosition.x-1,	_NewPosition.y+1 	] 	!= 1 ) )
 					{
 						_NewPosition.y = _NewPosition.y + 1;
+						no_path = true;
 					}
 					else{
 						E_Iscorrect = false;
@@ -189,6 +191,7 @@ public class TownGenerator : MonoBehaviour {
 					   (_TownTable[		_NewPosition.x+1,	_NewPosition.y-1 ] 	!= -1000 && _TownTable[_NewPosition.x+1,	_NewPosition.y-1 ]	!= 1 ) )
 					{
 						_NewPosition.x = _NewPosition.x + 1;
+						no_path = true;
 					}
 					else{
 						S_Iscorrect = false;
@@ -209,6 +212,7 @@ public class TownGenerator : MonoBehaviour {
 					   (_TownTable[		_NewPosition.x-1,	_NewPosition.y-1 ] 	!= -1000 && _TownTable[_NewPosition.x-1,	_NewPosition.y-1 ] 	!= 1 ) )
 					{
 						_NewPosition.y = _NewPosition.y - 1;
+						no_path = true;
 					}
 					else{
 						W_Iscorrect = false;
