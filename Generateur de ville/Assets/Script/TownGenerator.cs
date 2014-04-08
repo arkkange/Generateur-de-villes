@@ -103,10 +103,10 @@ public class TownGenerator : MonoBehaviour {
 	#region fonction de tracé de route
 	//fonction qui envoi la position de la poursuite de la route
 	public Position NewRoad(Position _AP  , int[,] _TownTable){
-		/*
+
 		int _newdirection;
 		Position _NewPosition = new Position(_AP.x,_AP.y);
-
+		/*
 		_newdirection = (int)Random.Range(1,4);
 
 		//verification que la direction est bonne
