@@ -12,7 +12,37 @@ public class TownGenerator2 : MonoBehaviour {
 	[SerializeField]
 	Transform _route_croisement;
 	
-	
+	[SerializeField]
+	Transform _Centre_commercial;
+	[SerializeField]
+	Transform _centre_commercial2;
+	[SerializeField]
+	Transform _immeuble_grand;
+	[SerializeField]
+	Transform _immeuble_grand2;
+	[SerializeField]
+	Transform _immeuble_petit;
+	[SerializeField]
+	Transform _immeuble_petit2;
+	[SerializeField]
+	Transform _maison;
+	[SerializeField]
+	Transform _maison1;
+	[SerializeField]
+	Transform _maison2;
+	[SerializeField]
+	Transform _maison3;
+	[SerializeField]
+	Transform _maison4;
+	[SerializeField]
+	Transform _maison5;
+	[SerializeField]
+	Transform _statue;
+	[SerializeField]
+	Transform _park;
+	[SerializeField]
+	Transform _champ;
+
 	[SerializeField]
 	public static int taille = 100;
 	
@@ -29,7 +59,23 @@ public class TownGenerator2 : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
-		
+		Vector3 DA_VOCOTOR = new Vector3(0.1f,0.1f,0.1f);
+		_Centre_commercial.transform.localScale = DA_VOCOTOR;
+		_maison.transform.transform.localScale = DA_VOCOTOR;
+		_maison1.transform.localScale = DA_VOCOTOR;
+		_maison2.transform.localScale = DA_VOCOTOR;
+		_maison3.transform.localScale = DA_VOCOTOR;
+		_maison4.transform.localScale = DA_VOCOTOR;
+		_maison5.transform.localScale = DA_VOCOTOR;
+		_centre_commercial2.transform.localScale = DA_VOCOTOR;
+		_park.transform.localScale = DA_VOCOTOR;
+		_champ.transform.localScale = new Vector3(0.4f,0.4f,0.001f);
+		_statue.transform.localScale = DA_VOCOTOR;
+		_immeuble_petit.transform.localScale = DA_VOCOTOR;
+		_immeuble_petit2.transform.localScale = DA_VOCOTOR;
+		_immeuble_grand.transform.localScale = DA_VOCOTOR;
+		_immeuble_grand2.transform.localScale = DA_VOCOTOR;
+
 		_TownTable = new int[taille,taille];
 		_TownTable = TableIntitialisation(taille);
 		Position _ActualPosition = new Position(0,0);
@@ -183,12 +229,107 @@ public class TownGenerator2 : MonoBehaviour {
 						Instantiate(_route_croisement,position,rotation);
 					}
 				}
-				else if(Table[j,k] == 2)
+				if(Table[j,k] == 2)
 				{
 					Vector3 position = new Vector3(j,0,k);
 					Quaternion rotation = _route_droite.rotation;
 					Instantiate(_route_droite,position,rotation);
 
+				}
+				if(Table[j,k] == 15)
+				{
+					if(j <= 30 || k <= 30 || j >= 70 || k >= 70)
+					{
+						if(j <=20 && j >= 10 || k <= 20 && k >= 10 || j >= 80 && j <= 90|| k >= 70 && k <= 90)
+						{
+							int batoupas = Random.Range(0,20);
+							if(batoupas <18){
+								
+							}
+							else
+							{
+								Vector3 position = new Vector3(j,0,k);
+								Quaternion rotation = _Centre_commercial.rotation;
+								Instantiate(_Centre_commercial,position,rotation);
+							}
+						}
+						else
+						{
+							int batoupas = Random.Range(0,10);
+							if(batoupas >5){
+								Vector3 position = new Vector3(j,0,k);
+								Quaternion rotation = _Centre_commercial.rotation;
+								Instantiate(_Centre_commercial,position,rotation);
+							}
+						}
+
+					}
+					else
+					{
+						Vector3 position = new Vector3(j,0,k);
+						Quaternion rotation = _Centre_commercial.rotation;
+						Instantiate(_Centre_commercial,position,rotation);
+					}
+				}
+
+				if(Table[j,k] == 16)
+				{
+					int DA_RANDOM = Random.Range(0,5);
+					if(DA_RANDOM == 0)
+					{
+						Vector3 position = new Vector3(j,0,k);
+						Quaternion rotation = _maison.rotation;
+						Instantiate(_maison,position,rotation);
+					}
+					if(DA_RANDOM == 1)
+					{
+						Vector3 position = new Vector3(j,0,k);
+						Quaternion rotation = _maison1.rotation;
+						Instantiate(_maison1,position,rotation);
+					}
+					if(DA_RANDOM == 2)
+					{
+						Vector3 position = new Vector3(j,0,k);
+						Quaternion rotation = _maison2.rotation;
+						Instantiate(_maison2,position,rotation);
+					}
+					if(DA_RANDOM == 3)
+					{
+						Vector3 position = new Vector3(j,0,k);
+						Quaternion rotation = _maison3.rotation;
+						Instantiate(_maison3,position,rotation);
+					}
+					if(DA_RANDOM == 4)
+					{
+						Vector3 position = new Vector3(j,0,k);
+						Quaternion rotation = _maison4.rotation;
+						Instantiate(_maison4,position,rotation);
+					}
+					if(DA_RANDOM == 5)
+					{
+						Vector3 position = new Vector3(j,0,k);
+						Quaternion rotation = _maison5.rotation;
+						Instantiate(_maison5,position,rotation);
+					}
+
+				}
+				if(Table[j,k] == 17)
+				{
+					Vector3 position = new Vector3(j,0,k);
+					Quaternion rotation = _champ.rotation;
+					Instantiate(_champ,position,rotation);
+				}
+				if(Table[j,k] == 18)
+				{
+					Vector3 position = new Vector3(j,0,k);
+					Quaternion rotation = _immeuble_grand.rotation;
+					Instantiate(_immeuble_grand,position,rotation);
+				}
+				if(Table[j,k] == 19)
+				{
+					Vector3 position = new Vector3(j,0,k);
+					Quaternion rotation = _statue.rotation;
+					Instantiate(_statue,position,rotation);
 				}
 			}
 		}

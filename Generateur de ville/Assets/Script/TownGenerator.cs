@@ -164,7 +164,7 @@ public class TownGenerator : MonoBehaviour {
 		//si on est au début du tableau
 		if(x>0)
 		{
-			if(_TownTable[x-1,y] >5 && _TownTable[x+1,y] < 10)
+			if(_TownTable[x-1,y] >5 && _TownTable[x-1,y] < 10)
 			{
 				if(_TownTable[x-2,y] == 0)
 				{
@@ -180,7 +180,7 @@ public class TownGenerator : MonoBehaviour {
 		//si on est au début du tableau
 		if(y>0)
 		{
-			if(_TownTable[x,y-1] >5 && _TownTable[x+1,y] < 10)
+			if(_TownTable[x,y-1] >5 && _TownTable[x,y-1] < 10)
 			{
 				if(_TownTable[x,y-2] == 0)
 				{
@@ -216,6 +216,36 @@ public class TownGenerator : MonoBehaviour {
 					Vector3 position = new Vector3(j,0,k);
 					Quaternion rotation = _route_croisement.rotation;
 					Instantiate(_route_croisement,position,rotation);
+				}
+				if(Table[j,k] == 15)
+				{
+					Vector3 position = new Vector3(j,0,k);
+					Quaternion rotation = _Centre_commercial.rotation;
+					Instantiate(_Centre_commercial,position,rotation);
+				}
+				if(Table[j,k] == 16)
+				{
+					Vector3 position = new Vector3(j,0,k);
+					Quaternion rotation = _Centre_commercial.rotation;
+					Instantiate(_Centre_commercial,position,rotation);
+				}
+				if(Table[j,k] == 17)
+				{
+					Vector3 position = new Vector3(j,0,k);
+					Quaternion rotation = _Centre_commercial.rotation;
+					Instantiate(_Centre_commercial,position,rotation);
+				}
+				if(Table[j,k] == 18)
+				{
+					Vector3 position = new Vector3(j,0,k);
+					Quaternion rotation = _Centre_commercial.rotation;
+					Instantiate(_Centre_commercial,position,rotation);
+				}
+				if(Table[j,k] == 19)
+				{
+					Vector3 position = new Vector3(j,0,k);
+					Quaternion rotation = _Centre_commercial.rotation;
+					Instantiate(_Centre_commercial,position,rotation);
 				}
 			}
 		}
