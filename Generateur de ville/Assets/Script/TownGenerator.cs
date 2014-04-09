@@ -12,6 +12,37 @@ public class TownGenerator : MonoBehaviour {
 	[SerializeField]
 	Transform _route_croisement;
 
+	[SerializeField]
+	Transform _Centre_commercial;
+	[SerializeField]
+	Transform _centre_commercial2;
+	[SerializeField]
+	Transform _immeuble_grand;
+	[SerializeField]
+	Transform _immeuble_grand2;
+	[SerializeField]
+	Transform _immeuble_petit;
+	[SerializeField]
+	Transform _immeuble_petit2;
+	[SerializeField]
+	Transform _maison;
+	[SerializeField]
+	Transform _maison1;
+	[SerializeField]
+	Transform _maison2;
+	[SerializeField]
+	Transform _maison3;
+	[SerializeField]
+	Transform _maison4;
+	[SerializeField]
+	Transform _maison5;
+	[SerializeField]
+	Transform _statue;
+	[SerializeField]
+	Transform _park;
+	[SerializeField]
+	Transform _champ;
+
 
 	[SerializeField]
 	public static int taille = 100;
@@ -74,13 +105,96 @@ public class TownGenerator : MonoBehaviour {
 			Debug.Log (" compte = "+compte);
 
 		}
+		for(int j = 0; j < taille - 1; j++)
+		{
+			for(int k = 0; k < taille-1; k++)
+			{
+				if(_TownTable[j,k] == 0)
+				{
+					int _typequartier = Random.Range(15,20);
+					creerQuartier(j,k, _typequartier);
+				}
+			}
 
+		}
 		//instanciations of all objects on the scene
 		Instanciate(_TownTable);
 
 	}
 
 	#region functions
+
+	//creer quartier
+	public void creerQuartier(int x, int y, int type)
+	{
+		_TownTable[x,y] = type;
+		//si on est a la fin du tableau
+		if(x<taille-1)
+		{
+			//si ya une route non principal on vas chercher plus loin!
+			if(_TownTable[x+1,y] >5 && _TownTable[x+1,y] < 10)
+			{
+				if(_TownTable[x+2,y] == 0)
+				{
+					creerQuartier(x+2,y,type);
+				}
+			}
+			//on renvoie en bas!
+			if(_TownTable[x+1,y] == 0)
+			{
+				creerQuartier(x+1,y,type);
+			}
+		}
+		//si on est a la fin du tableau
+		if(y<taille-1)
+		{
+			if(_TownTable[x,y+1] >5 && _TownTable[x,y+1] < 10)
+			{
+				if(_TownTable[x,y+2] == 0)
+				{
+					creerQuartier(x,y+2,type);
+				}
+			}
+			//on renvoie a droite
+			if(_TownTable[x,y+1] == 0)
+			{
+				creerQuartier(x,y+1,type);
+			}
+		}
+		//si on est au début du tableau
+		if(x>0)
+		{
+			if(_TownTable[x-1,y] >5 && _TownTable[x+1,y] < 10)
+			{
+				if(_TownTable[x-2,y] == 0)
+				{
+					creerQuartier(x-2,y,type);
+				}
+			}
+			//on envoie en haut!
+			if(_TownTable[x-1,y] == 0)
+			{
+				creerQuartier(x-1,y,type);
+			}
+		}
+		//si on est au début du tableau
+		if(y>0)
+		{
+			if(_TownTable[x,y-1] >5 && _TownTable[x+1,y] < 10)
+			{
+				if(_TownTable[x,y-2] == 0)
+				{
+					creerQuartier(x,y-2,type);
+				}
+			}
+			//on envoie a gauche!
+			if(_TownTable[x,y-1] == 0)
+			{
+				creerQuartier(x,y-1,type);
+			}
+		}
+	}
+
 
 	int[,] TableIntitialisation(int taille){
 		int[,] table = new int[taille,taille];

@@ -2,7 +2,10 @@ fileFormatVersion: 2
 guid: d218f47d4fd839048b69fe9d20b3e901
 MonoImporter:
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - _route_droite: {fileID: 400000, guid: d44c8f100c8b9d24e91d2c22e49223f1, type: 2}
+  - _route_angle: {fileID: 400000, guid: 8eca652d753f3484884385453913b91a, type: 2}
+  - _route_croisement: {fileID: 400000, guid: 03467a81587519a4eb2a1b17aa75f68e, type: 2}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
