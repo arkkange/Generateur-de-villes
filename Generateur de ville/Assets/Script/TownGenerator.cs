@@ -36,6 +36,7 @@ public class TownGenerator : MonoBehaviour {
 		bool _roading;
 
 		Position _centre = new Position(taille/2,taille/2);
+		//Position _centre = new Position(0,0);
 		Position _ActualPosition = new Position(_centre);
 		Position _NewPosition= new Position(_centre);
 
@@ -82,7 +83,6 @@ public class TownGenerator : MonoBehaviour {
 	#region functions
 
 	int[,] TableIntitialisation(int taille){
-
 		int[,] table = new int[taille,taille];
 
 		for (int j=0 ; j < taille ; j++){
