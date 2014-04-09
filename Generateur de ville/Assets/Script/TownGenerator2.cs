@@ -40,7 +40,6 @@ public class TownGenerator2 : MonoBehaviour {
 			{
 				if((j == 0 || k == 0 || j == taille - 1 || k == taille -1) && _TownTable[j,k] == 2)
 				{
-
 					Position _NewPosition = new Position(j,k);
 					NewRoad2(_NewPosition, _TownTable);
 				}
