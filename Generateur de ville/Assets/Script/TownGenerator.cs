@@ -140,9 +140,11 @@ public class TownGenerator : MonoBehaviour {
 
 			//verification que la direction est bonne
 			if(_newdirection == 1 && N_Iscorrect == true){
+				//conditions de sorties de tableau
 				if(	_NewPosition.x-1 >= 0	&&
 				   	_NewPosition.y-1 >= 0 	&&
 				   	_NewPosition.y+1 < 100	){
+					//règles L systeme pour les routes
 					if((_TownTable[		_NewPosition.x-1,	_NewPosition.y -1 	] 	!= -1000 && _TownTable[	_NewPosition.x-1,	_NewPosition.y-1 	] 	!= 1 ) &&
 					   (_TownTable[		_NewPosition.x-1,	_NewPosition.y 		] 	!= -1000 && _TownTable[	_NewPosition.x-1,	_NewPosition.y 		] 	!= 1 ) &&
 					   (_TownTable[		_NewPosition.x-1,	_NewPosition.y +1	] 	!= -1000 && _TownTable[	_NewPosition.x-1,	_NewPosition.y+1	] 	!= 1 ) )
