@@ -1,0 +1,27 @@
+fileFormatVersion: 2
+guid: 379481b432732d840b66d1cdf57bab0d
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - _route_droite: {fileID: 400000, guid: d44c8f100c8b9d24e91d2c22e49223f1, type: 2}
+  - _route_angle: {fileID: 400000, guid: 8eca652d753f3484884385453913b91a, type: 2}
+  - _route_croisement: {fileID: 400000, guid: 03467a81587519a4eb2a1b17aa75f68e, type: 2}
+  - _Centre_commercial: {fileID: 400000, guid: 3fc2878d0ff548348a86e3670e558e2d, type: 3}
+  - _centre_commercial2: {fileID: 400000, guid: aa917d4a681988a448b8575760ef68a0,
+      type: 3}
+  - _immeuble_grand: {fileID: 400000, guid: b643f64d157f17845bf76a14be214705, type: 3}
+  - _immeuble_grand2: {fileID: 400000, guid: 43574d07f585a4f4aa41c7ef4f82188c, type: 3}
+  - _immeuble_petit: {fileID: 400000, guid: 6684d8787ad4d114790f3d442bef98cf, type: 3}
+  - _immeuble_petit2: {fileID: 400000, guid: 94842e63893df4b44b9185b60c691baa, type: 3}
+  - _maison: {fileID: 400000, guid: ee2038935a8ca6e42827bb468a00fc08, type: 3}
+  - _maison1: {fileID: 400000, guid: 3fc2878d0ff548348a86e3670e558e2d, type: 3}
+  - _maison2: {fileID: 400000, guid: 7bc5e597528dfaa45ac607afde6bac3a, type: 3}
+  - _maison3: {fileID: 400000, guid: c31ce0525d29c594ab73c2e7ac661617, type: 3}
+  - _maison4: {fileID: 400000, guid: 5bf8c0fe9b6eeb847a54c9388b21b160, type: 3}
+  - _maison5: {fileID: 400000, guid: a7aaf4594e80469428eccbfc8ef80982, type: 3}
+  - _statue: {fileID: 400000, guid: 52162855faa5b1a42a6ed2e650dc6d45, type: 3}
+  - _park: {fileID: 400000, guid: 716311f791e87c841b6620aba5c29ace, type: 3}
+  - _champ: {fileID: 400000, guid: 458860b4dbebb5c4c9990cf3a57a6d9d, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
