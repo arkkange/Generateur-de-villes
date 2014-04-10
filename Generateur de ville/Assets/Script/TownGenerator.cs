@@ -26,6 +26,7 @@ public class TownGenerator : MonoBehaviour {
 	 * 4 ==> intersection Road
 	 * 5 ==> Zone de quartier
 	*/
+
 		
 
 	// Use this for initialization
