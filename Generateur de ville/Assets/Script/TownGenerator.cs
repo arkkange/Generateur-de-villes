@@ -41,9 +41,6 @@ public class TownGenerator : MonoBehaviour {
 	Transform _maison2;
 
 	[SerializeField]
-<<<<<<< HEAD
-	public static int taille = 200;	//minimum 50
-=======
 	Transform _maison3;
 
 	[SerializeField]
@@ -64,7 +61,6 @@ public class TownGenerator : MonoBehaviour {
 
 	[SerializeField]
 	public static int taille = 150;	//minimum 50
->>>>>>> origin/Louis
 
 	public static int[,] _TownTable;
 	/*
@@ -99,26 +95,16 @@ public class TownGenerator : MonoBehaviour {
 		_immeuble_grand2.transform.localScale = DA_VOCOTOR;
 		_TownTable = new int[taille,taille];
 		_TownTable = TableIntitialisation(taille);
-		bool _position_is_road;
 
 		//generation des 20 routes de la ville aleatoirement a partir du centre de la carte
 		for(int i =0; i< 200*20/100 ; i++){
 
-<<<<<<< HEAD
-			_position_is_road = false;
-=======
->>>>>>> origin/Louis
 			Position _position= new Position();
 
 			
 			//generation aleatoire de point de depart de la route
-<<<<<<< HEAD
-			int _x = (int)UnityEngine.Random.Range(taille/2 , taille/2 + taille/4);
-			int _y =	(int)UnityEngine.Random.Range(taille/2 , taille/2 + taille/4);
-=======
 			int _x = UnityEngine.Random.Range(taille/2 , taille/2 + taille/4);
 			int _y = UnityEngine.Random.Range(taille/2 , taille/2 + taille/4);
->>>>>>> origin/Louis
 			_position.SetPosition(_x,_y);
 
 
@@ -126,8 +112,6 @@ public class TownGenerator : MonoBehaviour {
 			for(int j=0; j<4;j++){
 				RoadCreation(_position, _TownTable, taille);
 			}
-<<<<<<< HEAD
-=======
 		}
 
 		for(int j = 0; j < taille - 1; j++)
@@ -190,14 +174,9 @@ public class TownGenerator : MonoBehaviour {
 			{
 				MettreAZero(x,y-1,numnerOfDaBeast);
 			}
->>>>>>> origin/Louis
 		}
 	}
 
-<<<<<<< HEAD
-		//instanciations de tous les objets dans la scène
-		Instanciate(_TownTable);
-=======
 	public void creerQuartier(int x, int y, int type)
 	{
 		_TownTable [x, y] = type;
@@ -217,7 +196,6 @@ public class TownGenerator : MonoBehaviour {
 						}
 				}
 		if (x > 0) {
->>>>>>> origin/Louis
 
 						//on envoie en haut!
 						if (_TownTable [x - 1, y] == 0) {
@@ -262,14 +240,6 @@ public class TownGenerator : MonoBehaviour {
 				if(Table[j,k] == 15)
 				{
 
-<<<<<<< HEAD
-
-	/*
-	 * Fonctions
-	 * 
-	 */
-
-=======
 						
 						Vector3 position = new Vector3(j,0,k);
 						Quaternion rotation = _Centre_commercial.rotation;
@@ -340,7 +310,6 @@ public class TownGenerator : MonoBehaviour {
 		}
 		
 	}
->>>>>>> origin/Louis
 
 	int[,] TableIntitialisation(int taille){
 
@@ -426,65 +395,6 @@ public class TownGenerator : MonoBehaviour {
 	}
 
 
-<<<<<<< HEAD
-	//cette fonction genere une route a l'emplacement donné
-	void RoadCreation(Position BeginPosition, int[,] _TownTable, int taille){
-		
-
-		bool _roading;
-		
-		Position _ActualPosition = new Position(BeginPosition);
-		Position _NewPosition= new Position(BeginPosition);
-		
-		//creation of the Roads
-		//recupération du centre et initialisation du booleen
-		_ActualPosition.SetPosition(BeginPosition);
-		_NewPosition.SetPosition(_ActualPosition);
-		_TownTable[ _ActualPosition.x, _ActualPosition.y] = 1;
-		_roading = true;
-		int _direction = 0;
-
-		int _TailleRoad = 10;	//taille des routes minimale droites ( a mettre en parametres)
-		int _countRoad = _TailleRoad;
-		//parcours total jusqu'a interuption de la route
-		while(_roading){
-
-			if(_countRoad == _TailleRoad){
-				//aleatoiriser une direction (on ajoute la directio na la liste)
-				_direction = (int)UnityEngine.Random.Range(1,5);
-			}
-			else if( _countRoad > 0 && _countRoad < _TailleRoad){
-
-			}
-			else if(_countRoad <= 0){
-				_countRoad = _TailleRoad;
-			}
-
-
-			NewRoad(_NewPosition, _TownTable, _direction );
-		
-		
-			//si la position n'as pas changée on stop le roading sinon on road
-			if( _NewPosition.Equals(_ActualPosition) ){
-				_roading = false;
-				Debug.Log("end of road because new position equals actual position");
-				Debug.Log("_NewPosition : "+_NewPosition.x+","+_NewPosition.y+" & _ActualPosition : "+_ActualPosition.x+","+_ActualPosition.y);
-			}
-			else{
-				//roader (c'est a dire ajouter la route au tableau
-				_ActualPosition.SetPosition(_NewPosition);
-				_TownTable[ _ActualPosition.x, _ActualPosition.y ] = 1;
-			}
-			
-			
-		}
-		
-		
-	}
-
-
-=======
->>>>>>> origin/Louis
 	//fonction qui envoi la position de la poursuite de la route
 	public void NewRoad(Position _NewPosition  , int[,] _TownTable, int _direction){
 
@@ -503,11 +413,7 @@ public class TownGenerator : MonoBehaviour {
 		do{
 
 			if(_direction_tested == true){
-<<<<<<< HEAD
-				_newdirection = (int)UnityEngine.Random.Range(1,5);
-=======
 				_newdirection = UnityEngine.Random.Range(1,5);
->>>>>>> origin/Louis
 			}
 			_direction_tested = true;
 
@@ -530,11 +436,7 @@ public class TownGenerator : MonoBehaviour {
 			if(_newdirection == 1 && N_Iscorrect == true){
 				if(	_NewPosition.x-1 >= 1	&&
 				   	_NewPosition.y-1 >= 1 	&&
-<<<<<<< HEAD
-				   	_NewPosition.y+1 < 200-1	){
-=======
 				   	_NewPosition.y+1 < taille-1	){
->>>>>>> origin/Louis
 					if((_TownTable[		_NewPosition.x-1,	_NewPosition.y -1 	] 	!= -2000 && _TownTable[	_NewPosition.x-1,	_NewPosition.y-1 	] 	!= 1 ) &&
 					   (_TownTable[		_NewPosition.x-1,	_NewPosition.y 		] 	!= -2000 && _TownTable[	_NewPosition.x-1,	_NewPosition.y 		] 	!= 1 ) &&
 					   (_TownTable[		_NewPosition.x-1,	_NewPosition.y +1	] 	!= -2000 && _TownTable[	_NewPosition.x-1,	_NewPosition.y+1	] 	!= 1 ))
@@ -553,15 +455,9 @@ public class TownGenerator : MonoBehaviour {
 			}
 
 			if(_newdirection == 2 && E_Iscorrect == true){
-<<<<<<< HEAD
-				if(	_NewPosition.y+1 <  200-1	&&
-					_NewPosition.x-1 >= 1 	&&
-				   	_NewPosition.x+1 <	200-1){
-=======
 				if(	_NewPosition.y+1 <  taille-1	&&
 					_NewPosition.x-1 >= 1 	&&
 				   	_NewPosition.x+1 <	taille-1){
->>>>>>> origin/Louis
 
 					if(	(_TownTable[	_NewPosition.x+1,	_NewPosition.y+1 ] 	!= -2000 && _TownTable[_NewPosition.x+1,	_NewPosition.y+1 	] 	!= 1 ) &&
 					   	(_TownTable[	_NewPosition.x,		_NewPosition.y+1 ] 	!= -2000 && _TownTable[_NewPosition.x,		_NewPosition.y+1 	] 	!= 1 ) &&
@@ -581,15 +477,9 @@ public class TownGenerator : MonoBehaviour {
 			}
 
 			if(_newdirection == 3 && S_Iscorrect == true){
-<<<<<<< HEAD
-				if(	_NewPosition.x+1 < 200-1	&&
-				   _NewPosition.y-1 >= 1 	&&
-				   _NewPosition.y+1 < 200-1	){
-=======
 				if(	_NewPosition.x+1 < taille-1	&&
 				   _NewPosition.y-1 >= 1 	&&
 				   _NewPosition.y+1 < taille-1	){
->>>>>>> origin/Louis
 					if((_TownTable[		_NewPosition.x+1,	_NewPosition.y+1 ] 	!= -2000 && _TownTable[_NewPosition.x+1,	_NewPosition.y+1 ] 	!= 1 ) &&
 					   (_TownTable[		_NewPosition.x+1,	_NewPosition.y 	] 	!= -2000 && _TownTable[_NewPosition.x+1,	_NewPosition.y 	] 	!= 1 ) &&
 					   (_TownTable[		_NewPosition.x+1,	_NewPosition.y-1 ] 	!= -2000 && _TownTable[_NewPosition.x+1,	_NewPosition.y-1 ]	!= 1 ))
@@ -610,11 +500,7 @@ public class TownGenerator : MonoBehaviour {
 			if(_newdirection == 4 && W_Iscorrect == true){
 				if(	_NewPosition.y-1 >= 1	&&
 				   _NewPosition.x-1 >= 1 	&&
-<<<<<<< HEAD
-				   _NewPosition.x+1 < 200-1	){
-=======
 				   _NewPosition.x+1 < taille-1	){
->>>>>>> origin/Louis
 					if((_TownTable[		_NewPosition.x+1,	_NewPosition.y-1 ] 	!= -2000 && _TownTable[_NewPosition.x+1,	_NewPosition.y-1 ] 	!= 1 ) &&
 					   (_TownTable[		_NewPosition.x,		_NewPosition.y-1 ] 	!= -2000 && _TownTable[_NewPosition.x,		_NewPosition.y-1 ] 	!= 1 ) &&
 					   (_TownTable[		_NewPosition.x-1,	_NewPosition.y-1 ] 	!= -2000 && _TownTable[_NewPosition.x-1,	_NewPosition.y-1 ] 	!= 1 ))
