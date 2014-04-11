@@ -79,8 +79,6 @@ public class TownGenerator : MonoBehaviour {
 		_statue.transform.localScale = DA_VOCOTOR;
 		_immeuble_petit.transform.localScale = DA_VOCOTOR;
 		_immeuble_petit2.transform.localScale = DA_VOCOTOR;
-		_immeuble_grand.transform.localScale = DA_VOCOTOR;
-		_immeuble_grand2.transform.localScale = DA_VOCOTOR;
 		_TownTable = new int[taille,taille];
 		_TownTable = TableIntitialisation(taille);
 		bool _position_is_road;
@@ -114,7 +112,7 @@ public class TownGenerator : MonoBehaviour {
 			{
 				if(_TownTable[j,k] == 0)
 				{
-					int typeQuartier = UnityEngine.Random.Range(15,20);
+					int typeQuartier = UnityEngine.Random.Range(15,19);
 					creerQuartier(j,k,typeQuartier);
 				}
 			}
@@ -468,15 +466,36 @@ public class TownGenerator : MonoBehaviour {
 				}
 				if(Table[j,k] == 18)
 				{
-					Vector3 position = new Vector3(j,0,k);
-					Quaternion rotation = _immeuble_grand.rotation;
-					Instantiate(_immeuble_grand,position,rotation);
-				}
-				if(Table[j,k] == 19)
-				{
-					Vector3 position = new Vector3(j,0,k);
-					Quaternion rotation = _statue.rotation;
-					Instantiate(_statue,position,rotation);
+					int randomBatTaille = UnityEngine.Random.Range(10,42);
+					int randomBat = UnityEngine.Random.Range(1,42);
+					if(randomBat <=19)
+					{
+						_immeuble_grand.transform.localScale = new Vector3(0.4f,0.2f,randomBatTaille/100f);
+						Vector3 position = new Vector3(j,0,k);
+						Quaternion rotation = _immeuble_grand.rotation;
+						Instantiate(_immeuble_grand,position,rotation);
+					}
+					if(randomBat >19 && randomBat<=38)
+					{
+						_immeuble_grand2.transform.localScale = new Vector3(0.4f,0.2f,randomBatTaille/100f);
+						Vector3 position = new Vector3(j,0,k);
+						Quaternion rotation = _immeuble_grand2.rotation;
+						Instantiate(_immeuble_grand2,position,rotation);
+
+					}
+					if(randomBat > 38 && (_TownTable[j+1,k]==1 || _TownTable[j-1,k]==1 || _TownTable[j,k-1]==1 || _TownTable[j,k+1]==1))
+					{
+						Vector3 position = new Vector3(j,0,k);
+						Quaternion rotation = _statue.rotation;
+						Instantiate(_statue,position,rotation);
+					}
+					else
+					{
+						_immeuble_grand2.transform.localScale = new Vector3(0.4f,0.2f,randomBatTaille/100f);
+						Vector3 position = new Vector3(j,0,k);
+						Quaternion rotation = _immeuble_grand2.rotation;
+						Instantiate(_immeuble_grand2,position,rotation);
+					}
 				}
 			}
 		}
