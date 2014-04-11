@@ -6,6 +6,7 @@ MonoImporter:
   - _route_droite: {fileID: 400000, guid: d44c8f100c8b9d24e91d2c22e49223f1, type: 2}
   - _route_angle: {fileID: 400000, guid: 8eca652d753f3484884385453913b91a, type: 2}
   - _route_croisement: {fileID: 400000, guid: 03467a81587519a4eb2a1b17aa75f68e, type: 2}
+  - _route_et_virage: {fileID: 400000, guid: 02e410991bb409c4fa3758c61166160c, type: 2}
   - _Centre_commercial: {fileID: 400000, guid: 3fc2878d0ff548348a86e3670e558e2d, type: 3}
   - _centre_commercial2: {fileID: 400000, guid: aa917d4a681988a448b8575760ef68a0,
       type: 3}
