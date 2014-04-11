@@ -28,6 +28,8 @@ public class TownGenerator : MonoBehaviour {
 	[SerializeField]
 	Transform _immeuble_grand2;
 	[SerializeField]
+	Transform _immeuble_grand3;
+	[SerializeField]
 	Transform _immeuble_petit;
 	[SerializeField]
 	Transform _immeuble_petit2;
@@ -470,14 +472,14 @@ public class TownGenerator : MonoBehaviour {
 					int randomBat = UnityEngine.Random.Range(1,42);
 					if(randomBat <=19)
 					{
-						_immeuble_grand.transform.localScale = new Vector3(0.4f,0.2f,randomBatTaille/100f);
+						_immeuble_grand.transform.localScale = new Vector3(0.02f,0.02f,randomBatTaille/1000f);
 						Vector3 position = new Vector3(j,0,k);
 						Quaternion rotation = _immeuble_grand.rotation;
 						Instantiate(_immeuble_grand,position,rotation);
 					}
 					if(randomBat >19 && randomBat<=38)
 					{
-						_immeuble_grand2.transform.localScale = new Vector3(0.4f,0.2f,randomBatTaille/100f);
+						_immeuble_grand2.transform.localScale = new Vector3(0.002f,randomBatTaille/20000f,0.002f);
 						Vector3 position = new Vector3(j,0,k);
 						Quaternion rotation = _immeuble_grand2.rotation;
 						Instantiate(_immeuble_grand2,position,rotation);
@@ -489,13 +491,13 @@ public class TownGenerator : MonoBehaviour {
 						Quaternion rotation = _statue.rotation;
 						Instantiate(_statue,position,rotation);
 					}
-					else
+					/*if(randomBat > 38 && !(_TownTable[j+1,k]==1 || _TownTable[j-1,k]==1 || _TownTable[j,k-1]==1 || _TownTable[j,k+1]==1))
 					{
 						_immeuble_grand2.transform.localScale = new Vector3(0.4f,0.2f,randomBatTaille/100f);
 						Vector3 position = new Vector3(j,0,k);
 						Quaternion rotation = _immeuble_grand2.rotation;
 						Instantiate(_immeuble_grand2,position,rotation);
-					}
+					}*/
 				}
 			}
 		}
