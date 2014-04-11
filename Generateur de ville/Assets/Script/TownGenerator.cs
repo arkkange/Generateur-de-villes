@@ -14,12 +14,6 @@ public class TownGenerator : MonoBehaviour {
 	Transform _route_croisement;
 
 	[SerializeField]
-	Transform _route_et_virage;
-
-	[SerializeField]
-	Transform _route_cul_de_sac;
-
-	[SerializeField]
 	Transform _Centre_commercial;
 	[SerializeField]
 	Transform _centre_commercial2;
@@ -51,14 +45,16 @@ public class TownGenerator : MonoBehaviour {
 	Transform _champ;
 
 	[SerializeField]
-	public static int taille = 150;	//minimum 50
+	public static int taille = 200;	//minimum 50
 
 	public static int[,] _TownTable;
 	/*
 	 * signification des nombres :
 	 * 0 ==> Nothing
 	 * 1 ==> Simple Road
-	 * 2 ==> secondary road
+	 * 2 ==> angle Road
+	 * 4 ==> intersection Road
+	 * 5 ==> Zone de quartier
 	*/
 
 		
@@ -85,43 +81,38 @@ public class TownGenerator : MonoBehaviour {
 		_TownTable = TableIntitialisation(taille);
 		bool _position_is_road;
 
-		//generation des 20% routes de la ville aleatoirement a partir du centre de la carte
-		for(int i =0; i< taille*20/100 ; i++){
+		//generation des 20 routes de la ville aleatoirement a partir du centre de la carte
+		for(int i =0; i< 200*20/100 ; i++){
 
 			_position_is_road = false;
 			Position _position= new Position();
 
-			do{
-				//generation aleatoire de point de depart de la route
-				int _x = UnityEngine.Random.Range(taille/2 , taille/2 + taille/4);
-				int _y =	UnityEngine.Random.Range(taille/2 , taille/2 + taille/4);
-				_position.SetPosition(_x,_y);
-			}while(IsRoute("N", _position, _TownTable) || IsRoute("E", _position, _TownTable) || IsRoute("S", _position, _TownTable) || IsRoute("WN", _position, _TownTable));
+			
+			//generation aleatoire de point de depart de la route
+			int _x = UnityEngine.Random.Range(taille/2 , taille/2 + taille/4);
+			int _y =	UnityEngine.Random.Range(taille/2 , taille/2 + taille/4);
+			_position.SetPosition(_x,_y);
+
 
 			//lancement de la construction de route
 			for(int j=0; j<4;j++){
 				RoadCreation(_position, _TownTable, taille);
 			}
-			
-
-
 		}
 
-		//generation des quartiers
 		for(int j = 0; j < taille - 1; j++)
 		{
 			for(int k = 0; k < taille - 1; k++)
 			{
 				if(_TownTable[j,k] == 0)
 				{
-					int typeQuartier = UnityEngine.Random.Range(15,20);
-					creerQuartier(j,k,typeQuartier);
+				int typeQuartier = UnityEngine.Random.Range(15,20);
+				creerQuartier(j,k,typeQuartier);
 				}
 			}
 		}
 		int numeroCase = _TownTable[5,5];
 		MettreAZero(5,5,numeroCase);
-
 		//instanciations de tous les objets dans la scène
 		Instanciate(_TownTable);
 
@@ -213,209 +204,41 @@ public class TownGenerator : MonoBehaviour {
 			}
 		}
 	}
-
-	void DessinerRoute(int j, int k,int[,] _TownTable){
-		Position _thisPosition = new Position(j,k);
-
-		//routes droite
-		if( IsRoute("N", _thisPosition, _TownTable) && IsRoute("S", _thisPosition, _TownTable) &&
-		   	!IsRoute("E", _thisPosition, _TownTable) && !IsRoute("W", _thisPosition, _TownTable)  ){
-			Vector3 position = new Vector3(j,0,k);
-			Quaternion rotation = Quaternion.Euler(-90,0,0);	//rotation de 90° sur la route
-			Instantiate(_route_droite,position,rotation);
-		}
-		else if( IsRoute("E", _thisPosition, _TownTable) && IsRoute("W", _thisPosition, _TownTable) &&
-		   !IsRoute("N", _thisPosition, _TownTable) && !IsRoute("S", _thisPosition, _TownTable)  ){
-			Vector3 position = new Vector3(j,0,k);
-			Quaternion rotation = Quaternion.Euler(-90,0,90);	//pas de rotation de 90° sur la route
-			Instantiate(_route_droite,position,rotation);
-		}
-
-		//angles a 90°
-		else if( IsRoute("S", _thisPosition, _TownTable) && IsRoute("W", _thisPosition, _TownTable)	&&
-		   !IsRoute("N", _thisPosition, _TownTable)&& !IsRoute("E", _thisPosition, _TownTable) ){
-			
-			Vector3 position = new Vector3(j,0,k);
-			Quaternion rotation = Quaternion.Euler(-90,0,-90);			//pas de rotation sur la route
-			Instantiate(_route_angle,position,rotation);
-			
-		}
-		else if( IsRoute("S", _thisPosition, _TownTable) && IsRoute("E", _thisPosition, _TownTable)	&&
-		   	!IsRoute("W", _thisPosition, _TownTable)&& !IsRoute("N", _thisPosition, _TownTable) ){
-
-			Vector3 position = new Vector3(j,0,k);
-			Quaternion rotation = Quaternion.Euler(-90,0,180);			//rotation de -90° sur la route
-			Instantiate(_route_angle,position,rotation);
-			
-		}
-		else if( IsRoute("W", _thisPosition, _TownTable) && IsRoute("N", _thisPosition, _TownTable)	&&
-		   !IsRoute("S", _thisPosition, _TownTable)&& !IsRoute("E", _thisPosition, _TownTable) ){
-			
-			Vector3 position = new Vector3(j,0,k);
-			Quaternion rotation = Quaternion.Euler(-90,0,0);
-			Instantiate(_route_angle,position,rotation);
-			
-		}
-		else if( IsRoute("N", _thisPosition, _TownTable) && IsRoute("E", _thisPosition, _TownTable)	&&
-		   !IsRoute("S", _thisPosition, _TownTable)&& !IsRoute("W", _thisPosition, _TownTable) ){
-			
-			Vector3 position = new Vector3(j,0,k);
-			Quaternion rotation = Quaternion.Euler(-90,0,90);
-			Instantiate(_route_angle,position,rotation);
-			
-		}
-
-		//routes et virage
-		else if( IsRoute("S", _thisPosition, _TownTable) && IsRoute("E", _thisPosition, _TownTable)	&&
-		        IsRoute("W", _thisPosition, _TownTable)	 &&	!IsRoute("N", _thisPosition, _TownTable) ){
-			
-			Vector3 position = new Vector3(j,0,k);
-			Quaternion rotation = Quaternion.Euler(-90,0,-90);
-			Instantiate(_route_et_virage,position,rotation);
-			
-		}
-		else if( IsRoute("S", _thisPosition, _TownTable) && IsRoute("N", _thisPosition, _TownTable)	&&
-		        IsRoute("W", _thisPosition, _TownTable)	 &&	!IsRoute("E", _thisPosition, _TownTable) ){
-			
-			Vector3 position = new Vector3(j,0,k);
-			Quaternion rotation = Quaternion.Euler(-90,0,0);
-			Instantiate(_route_et_virage,position,rotation);
-			
-		}
-		else if( IsRoute("S", _thisPosition, _TownTable) && IsRoute("N", _thisPosition, _TownTable)	&&
-		        IsRoute("E", _thisPosition, _TownTable)	 &&	!IsRoute("W", _thisPosition, _TownTable) ){
-			
-			Vector3 position = new Vector3(j,0,k);
-			Quaternion rotation = Quaternion.Euler(-90,0,180);
-			Instantiate(_route_et_virage,position,rotation);
-			
-		}
-		else if( IsRoute("W", _thisPosition, _TownTable) && IsRoute("N", _thisPosition, _TownTable)	&&
-		        IsRoute("E", _thisPosition, _TownTable)	 &&	!IsRoute("S", _thisPosition, _TownTable) ){
-			
-			Vector3 position = new Vector3(j,0,k);
-			Quaternion rotation = Quaternion.Euler(-90,0,90);
-			Instantiate(_route_et_virage,position,rotation);
-			
-		}
-
-		//routes cul de sac
-		else if( IsRoute("N", _thisPosition, _TownTable) && !IsRoute("W", _thisPosition, _TownTable) &&
-		        !IsRoute("E", _thisPosition, _TownTable) &&	!IsRoute("S", _thisPosition, _TownTable) ){
-			
-			Vector3 position = new Vector3(j,0,k);
-			Quaternion rotation = Quaternion.Euler(-90,0,0);
-			Instantiate(_route_cul_de_sac,position,rotation);
-			
-		}
-		else if( IsRoute("W", _thisPosition, _TownTable) && !IsRoute("N", _thisPosition, _TownTable) &&
-		        !IsRoute("E", _thisPosition, _TownTable) &&	!IsRoute("S", _thisPosition, _TownTable) ){
-			
-			Vector3 position = new Vector3(j,0,k);
-			Quaternion rotation = Quaternion.Euler(-90,0,-90);
-			Instantiate(_route_cul_de_sac,position,rotation);
-			
-		}
-		else if( IsRoute("E", _thisPosition, _TownTable) && !IsRoute("N", _thisPosition, _TownTable) &&
-		        !IsRoute("W", _thisPosition, _TownTable) &&	!IsRoute("S", _thisPosition, _TownTable) ){
-			
-			Vector3 position = new Vector3(j,0,k);
-			Quaternion rotation = Quaternion.Euler(-90,0,90);
-			Instantiate(_route_cul_de_sac,position,rotation);
-			
-		}
-		else if( IsRoute("S", _thisPosition, _TownTable) && !IsRoute("N", _thisPosition, _TownTable) &&
-		        !IsRoute("W", _thisPosition, _TownTable) &&	!IsRoute("E", _thisPosition, _TownTable) ){
-			
-			Vector3 position = new Vector3(j,0,k);
-			Quaternion rotation = Quaternion.Euler(-90,0,180);
-			Instantiate(_route_cul_de_sac,position,rotation);
-			
-		}
-
-		//carefour
-		else if( IsRoute("N", _thisPosition, _TownTable) && IsRoute("E", _thisPosition, _TownTable)	&&
-		   IsRoute("S", _thisPosition, _TownTable)	&& IsRoute("W", _thisPosition, _TownTable) ){
-			
-			Vector3 position = new Vector3(j,0,k);
-			Quaternion rotation = Quaternion.Euler(-90,0,0);
-			Instantiate(_route_croisement,position,rotation);
-			
-		}
-		else{
-
-			Debug.Log ("erreur pas de generation : ("+_thisPosition.x+","+_thisPosition.y+")");
-		}
-
-	}
-
-	//permet de verifier a partir d'une position si oui ou non il ya une route dans cette direction
-	bool IsRoute(string _direction,Position _P, int[,] _TownTable){
-
-		if(_direction == "N"){
-			if( _TownTable[_P.x-1, _P.y] == 1){
-				return true;
-			}
-			else{
-				return false;
-			}
-		}
-		else if(_direction == "S"){
-			if( _TownTable[_P.x+1, _P.y] == 1){
-				return true;
-			}
-			else{
-				return false;
-			}
-		}
-		else if(_direction == "E"){
-			if( _TownTable[_P.x, _P.y+1] == 1){
-				return true;
-			}
-			else{
-				return false;
-			}
-		}
-		else if(_direction == "W"){
-			if( _TownTable[_P.x, _P.y-1] == 1){
-				return true;
-			}
-			else{
-				return false;
-			}
-		}
-		else{
-			return false;
-			Debug.Log("erreur fonction : cette direction n'existe pas !");
-		}
-
-	}
 	
 	
 	void Instanciate(int[,] Table){
 		
 		for (int j=0 ; j < taille ; j++){
 			for (int k=0 ; k < taille ; k++){
-
 				if(Table[j,k] == 1){
 					//pas afficher les routes des bords
-					if( !(j == 0 || k == 0 || k >= taille-1 || j >= taille-1 ) )
-					{	
-						//fonction qui instancie la route en fonction de son voisin
-						DessinerRoute(j,k,_TownTable);
+					if(j == 0 || k == 0)
+					{
+						
+					}
+					else
+					{
+						
+						Vector3 position = new Vector3(j,0,k);
+						Quaternion rotation = _route_croisement.rotation;
+						Instantiate(_route_croisement,position,rotation);
 					}
 				}
 
 				if(Table[j,k] == 2)
 				{
-					//dessin des routes secondaires
+					Vector3 position = new Vector3(j,0,k);
+					Quaternion rotation = _route_droite.rotation;
+					Instantiate(_route_droite,position,rotation);
 				
 				}
 				if(Table[j,k] == 15)
 				{
-					Vector3 position = new Vector3(j,0,k);
-					Quaternion rotation = _Centre_commercial.rotation;
-					Instantiate(_Centre_commercial,position,rotation);
+
+						
+						Vector3 position = new Vector3(j,0,k);
+						Quaternion rotation = _Centre_commercial.rotation;
+						Instantiate(_Centre_commercial,position,rotation);
 
 				}
 				
@@ -496,6 +319,20 @@ public class TownGenerator : MonoBehaviour {
 		return table;
 	}
 
+	/*void Instanciate(int[,] Table){
+
+		for (int j=0 ; j < taille ; j++){
+			for (int k=0 ; k < taille ; k++){
+				if(Table[j,k] == 1){
+					Vector3 position = new Vector3(j,0,k);
+					Quaternion rotation = _route_croisement.rotation;
+					Instantiate(_route_croisement,position,rotation);
+				}
+			}
+		}
+
+	}*/
+
 
 	//cette fonction genere une route a l'emplacement donné
 	void RoadCreation(Position BeginPosition, int[,] _TownTable, int taille){
@@ -575,14 +412,29 @@ public class TownGenerator : MonoBehaviour {
 			}
 			_direction_tested = true;
 
+			//debug direction du random
+			if(_newdirection == 1){
+				//debug.Log("wantogo: N");
+			}
+			else if(_newdirection == 2){
+				//debug.Log("wantogo:E");
+			}
+			else if(_newdirection == 3){
+				//debug.Log("wantogo: S");
+			}
+			else if(_newdirection == 4){
+				//debug.Log("wantogo: W");
+			}
+
+
 			//verification que la direction est bonne
 			if(_newdirection == 1 && N_Iscorrect == true){
 				if(	_NewPosition.x-1 >= 1	&&
 				   	_NewPosition.y-1 >= 1 	&&
-				   	_NewPosition.y+1 < 150-1	){
-					if((_TownTable[		_NewPosition.x-1,	_NewPosition.y -1 	] 	!= -1500 && _TownTable[	_NewPosition.x-1,	_NewPosition.y-1 	] 	!= 1 ) &&
-					   (_TownTable[		_NewPosition.x-1,	_NewPosition.y 		] 	!= -1500 && _TownTable[	_NewPosition.x-1,	_NewPosition.y 		] 	!= 1 ) &&
-					   (_TownTable[		_NewPosition.x-1,	_NewPosition.y +1	] 	!= -1500 && _TownTable[	_NewPosition.x-1,	_NewPosition.y+1	] 	!= 1 ))
+				   	_NewPosition.y+1 < 200-1	){
+					if((_TownTable[		_NewPosition.x-1,	_NewPosition.y -1 	] 	!= -2000 && _TownTable[	_NewPosition.x-1,	_NewPosition.y-1 	] 	!= 1 ) &&
+					   (_TownTable[		_NewPosition.x-1,	_NewPosition.y 		] 	!= -2000 && _TownTable[	_NewPosition.x-1,	_NewPosition.y 		] 	!= 1 ) &&
+					   (_TownTable[		_NewPosition.x-1,	_NewPosition.y +1	] 	!= -2000 && _TownTable[	_NewPosition.x-1,	_NewPosition.y+1	] 	!= 1 ))
 					{
 						_NewPosition.x = _NewPosition.x - 1;
 						no_path = true;
@@ -598,13 +450,13 @@ public class TownGenerator : MonoBehaviour {
 			}
 
 			if(_newdirection == 2 && E_Iscorrect == true){
-				if(	_NewPosition.y+1 <  150-1	&&
+				if(	_NewPosition.y+1 <  200-1	&&
 					_NewPosition.x-1 >= 1 	&&
-				   	_NewPosition.x+1 <	150-1){
+				   	_NewPosition.x+1 <	200-1){
 
-					if(	(_TownTable[	_NewPosition.x+1,	_NewPosition.y+1 ] 	!= -1500 && _TownTable[_NewPosition.x+1,	_NewPosition.y+1 	] 	!= 1 ) &&
-					   	(_TownTable[	_NewPosition.x,		_NewPosition.y+1 ] 	!= -1500 && _TownTable[_NewPosition.x,		_NewPosition.y+1 	] 	!= 1 ) &&
-				   		(_TownTable[	_NewPosition.x-1,	_NewPosition.y+1 ] 	!= -1500 && _TownTable[_NewPosition.x-1,	_NewPosition.y+1 	] 	!= 1 ))
+					if(	(_TownTable[	_NewPosition.x+1,	_NewPosition.y+1 ] 	!= -2000 && _TownTable[_NewPosition.x+1,	_NewPosition.y+1 	] 	!= 1 ) &&
+					   	(_TownTable[	_NewPosition.x,		_NewPosition.y+1 ] 	!= -2000 && _TownTable[_NewPosition.x,		_NewPosition.y+1 	] 	!= 1 ) &&
+				   		(_TownTable[	_NewPosition.x-1,	_NewPosition.y+1 ] 	!= -2000 && _TownTable[_NewPosition.x-1,	_NewPosition.y+1 	] 	!= 1 ))
 					{
 						_NewPosition.y = _NewPosition.y + 1;
 						no_path = true;
@@ -620,12 +472,12 @@ public class TownGenerator : MonoBehaviour {
 			}
 
 			if(_newdirection == 3 && S_Iscorrect == true){
-				if(	_NewPosition.x+1 < 150-1	&&
+				if(	_NewPosition.x+1 < 200-1	&&
 				   _NewPosition.y-1 >= 1 	&&
-				   _NewPosition.y+1 < 150-1	){
-					if((_TownTable[		_NewPosition.x+1,	_NewPosition.y+1 ] 	!= -1500 && _TownTable[_NewPosition.x+1,	_NewPosition.y+1 ] 	!= 1 ) &&
-					   (_TownTable[		_NewPosition.x+1,	_NewPosition.y 	] 	!= -1500 && _TownTable[_NewPosition.x+1,	_NewPosition.y 	] 	!= 1 ) &&
-					   (_TownTable[		_NewPosition.x+1,	_NewPosition.y-1 ] 	!= -1500 && _TownTable[_NewPosition.x+1,	_NewPosition.y-1 ]	!= 1 ))
+				   _NewPosition.y+1 < 200-1	){
+					if((_TownTable[		_NewPosition.x+1,	_NewPosition.y+1 ] 	!= -2000 && _TownTable[_NewPosition.x+1,	_NewPosition.y+1 ] 	!= 1 ) &&
+					   (_TownTable[		_NewPosition.x+1,	_NewPosition.y 	] 	!= -2000 && _TownTable[_NewPosition.x+1,	_NewPosition.y 	] 	!= 1 ) &&
+					   (_TownTable[		_NewPosition.x+1,	_NewPosition.y-1 ] 	!= -2000 && _TownTable[_NewPosition.x+1,	_NewPosition.y-1 ]	!= 1 ))
 					{
 						_NewPosition.x = _NewPosition.x + 1;
 						no_path = true;
@@ -643,10 +495,10 @@ public class TownGenerator : MonoBehaviour {
 			if(_newdirection == 4 && W_Iscorrect == true){
 				if(	_NewPosition.y-1 >= 1	&&
 				   _NewPosition.x-1 >= 1 	&&
-				   _NewPosition.x+1 < 150-1	){
-					if((_TownTable[		_NewPosition.x+1,	_NewPosition.y-1 ] 	!= -1500 && _TownTable[_NewPosition.x+1,	_NewPosition.y-1 ] 	!= 1 ) &&
-					   (_TownTable[		_NewPosition.x,		_NewPosition.y-1 ] 	!= -1500 && _TownTable[_NewPosition.x,		_NewPosition.y-1 ] 	!= 1 ) &&
-					   (_TownTable[		_NewPosition.x-1,	_NewPosition.y-1 ] 	!= -1500 && _TownTable[_NewPosition.x-1,	_NewPosition.y-1 ] 	!= 1 ))
+				   _NewPosition.x+1 < 200-1	){
+					if((_TownTable[		_NewPosition.x+1,	_NewPosition.y-1 ] 	!= -2000 && _TownTable[_NewPosition.x+1,	_NewPosition.y-1 ] 	!= 1 ) &&
+					   (_TownTable[		_NewPosition.x,		_NewPosition.y-1 ] 	!= -2000 && _TownTable[_NewPosition.x,		_NewPosition.y-1 ] 	!= 1 ) &&
+					   (_TownTable[		_NewPosition.x-1,	_NewPosition.y-1 ] 	!= -2000 && _TownTable[_NewPosition.x-1,	_NewPosition.y-1 ] 	!= 1 ))
 					{
 						_NewPosition.y = _NewPosition.y - 1;
 						no_path = true;
