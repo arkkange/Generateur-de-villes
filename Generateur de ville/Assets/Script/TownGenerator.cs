@@ -15,52 +15,37 @@ public class TownGenerator : MonoBehaviour {
 
 	[SerializeField]
 	Transform _Centre_commercial;
-
 	[SerializeField]
 	Transform _centre_commercial2;
-
 	[SerializeField]
 	Transform _immeuble_grand;
-
 	[SerializeField]
 	Transform _immeuble_grand2;
-
 	[SerializeField]
 	Transform _immeuble_petit;
-
 	[SerializeField]
 	Transform _immeuble_petit2;
-
 	[SerializeField]
 	Transform _maison;
-
 	[SerializeField]
 	Transform _maison1;
-
 	[SerializeField]
 	Transform _maison2;
-
 	[SerializeField]
 	Transform _maison3;
-
 	[SerializeField]
 	Transform _maison4;
-
 	[SerializeField]
 	Transform _maison5;
-
 	[SerializeField]
 	Transform _statue;
-
 	[SerializeField]
-
 	Transform _park;
-
 	[SerializeField]
 	Transform _champ;
 
 	[SerializeField]
-	public static int taille = 150;	//minimum 50
+	public static int taille = 200;	//minimum 50
 
 	public static int[,] _TownTable;
 	/*
@@ -76,7 +61,6 @@ public class TownGenerator : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-
 		Vector3 DA_VOCOTOR = new Vector3(0.1f,0.1f,0.1f);
 		_Centre_commercial.transform.localScale = DA_VOCOTOR;
 		_maison.transform.transform.localScale = DA_VOCOTOR;
@@ -95,16 +79,18 @@ public class TownGenerator : MonoBehaviour {
 		_immeuble_grand2.transform.localScale = DA_VOCOTOR;
 		_TownTable = new int[taille,taille];
 		_TownTable = TableIntitialisation(taille);
+		bool _position_is_road;
 
 		//generation des 20 routes de la ville aleatoirement a partir du centre de la carte
 		for(int i =0; i< 200*20/100 ; i++){
 
+			_position_is_road = false;
 			Position _position= new Position();
 
 			
 			//generation aleatoire de point de depart de la route
 			int _x = UnityEngine.Random.Range(taille/2 , taille/2 + taille/4);
-			int _y = UnityEngine.Random.Range(taille/2 , taille/2 + taille/4);
+			int _y =	UnityEngine.Random.Range(taille/2 , taille/2 + taille/4);
 			_position.SetPosition(_x,_y);
 
 
@@ -179,35 +165,44 @@ public class TownGenerator : MonoBehaviour {
 
 	public void creerQuartier(int x, int y, int type)
 	{
-		_TownTable [x, y] = type;
+		_TownTable[x,y] = type;
 		//si on est a la fin du tableau
-		if (x < taille - 1) {
-						//si ya une route non principal on vas chercher plus loin!
-						//on renvoie en bas!
-						if (_TownTable [x + 1, y] == 0) {
-								creerQuartier (x + 1, y, type);
-						}
-				}
-		if (y < taille - 1) {
-
-						//on renvoie a droite
-						if (_TownTable [x, y + 1] == 0) {
-								creerQuartier (x, y + 1, type);
-						}
-				}
-		if (x > 0) {
-
-						//on envoie en haut!
-						if (_TownTable [x - 1, y] == 0) {
-								creerQuartier (x - 1, y, type);
-						}
-				}
-		if(y>0){
-						//on envoie a gauche!
-						if (_TownTable [x, y - 1] == 0) {
-								creerQuartier (x, y - 1, type);
-						}
-				}
+		if(x<taille-1)
+		{
+			//si ya une route non principal on vas chercher plus loin!
+			//on renvoie en bas!
+		if(_TownTable[x+1,y] == 0)
+			{
+				creerQuartier(x+1,y,type);
+			}
+		}
+		//si on est a la fin du tableau
+		if(y<taille-1)
+		{
+			//on renvoie a droite
+			if(_TownTable[x,y+1] == 0)
+			{
+				creerQuartier(x,y+1,type);
+			}
+		}
+		//si on est au début du tableau
+		if(x>0)
+		{
+			//on envoie en haut!
+			if(_TownTable[x-1,y] == 0)
+			{
+				creerQuartier(x-1,y,type);
+			}
+		}
+		//si on est au début du tableau
+		if(y>0)
+		{
+			//on envoie a gauche!
+			if(_TownTable[x,y-1] == 0)
+			{
+				creerQuartier(x,y-1,type);
+			}
+		}
 	}
 	
 	
@@ -436,7 +431,7 @@ public class TownGenerator : MonoBehaviour {
 			if(_newdirection == 1 && N_Iscorrect == true){
 				if(	_NewPosition.x-1 >= 1	&&
 				   	_NewPosition.y-1 >= 1 	&&
-				   	_NewPosition.y+1 < taille-1	){
+				   	_NewPosition.y+1 < 200-1	){
 					if((_TownTable[		_NewPosition.x-1,	_NewPosition.y -1 	] 	!= -2000 && _TownTable[	_NewPosition.x-1,	_NewPosition.y-1 	] 	!= 1 ) &&
 					   (_TownTable[		_NewPosition.x-1,	_NewPosition.y 		] 	!= -2000 && _TownTable[	_NewPosition.x-1,	_NewPosition.y 		] 	!= 1 ) &&
 					   (_TownTable[		_NewPosition.x-1,	_NewPosition.y +1	] 	!= -2000 && _TownTable[	_NewPosition.x-1,	_NewPosition.y+1	] 	!= 1 ))
@@ -455,9 +450,9 @@ public class TownGenerator : MonoBehaviour {
 			}
 
 			if(_newdirection == 2 && E_Iscorrect == true){
-				if(	_NewPosition.y+1 <  taille-1	&&
+				if(	_NewPosition.y+1 <  200-1	&&
 					_NewPosition.x-1 >= 1 	&&
-				   	_NewPosition.x+1 <	taille-1){
+				   	_NewPosition.x+1 <	200-1){
 
 					if(	(_TownTable[	_NewPosition.x+1,	_NewPosition.y+1 ] 	!= -2000 && _TownTable[_NewPosition.x+1,	_NewPosition.y+1 	] 	!= 1 ) &&
 					   	(_TownTable[	_NewPosition.x,		_NewPosition.y+1 ] 	!= -2000 && _TownTable[_NewPosition.x,		_NewPosition.y+1 	] 	!= 1 ) &&
@@ -477,9 +472,9 @@ public class TownGenerator : MonoBehaviour {
 			}
 
 			if(_newdirection == 3 && S_Iscorrect == true){
-				if(	_NewPosition.x+1 < taille-1	&&
+				if(	_NewPosition.x+1 < 200-1	&&
 				   _NewPosition.y-1 >= 1 	&&
-				   _NewPosition.y+1 < taille-1	){
+				   _NewPosition.y+1 < 200-1	){
 					if((_TownTable[		_NewPosition.x+1,	_NewPosition.y+1 ] 	!= -2000 && _TownTable[_NewPosition.x+1,	_NewPosition.y+1 ] 	!= 1 ) &&
 					   (_TownTable[		_NewPosition.x+1,	_NewPosition.y 	] 	!= -2000 && _TownTable[_NewPosition.x+1,	_NewPosition.y 	] 	!= 1 ) &&
 					   (_TownTable[		_NewPosition.x+1,	_NewPosition.y-1 ] 	!= -2000 && _TownTable[_NewPosition.x+1,	_NewPosition.y-1 ]	!= 1 ))
@@ -500,7 +495,7 @@ public class TownGenerator : MonoBehaviour {
 			if(_newdirection == 4 && W_Iscorrect == true){
 				if(	_NewPosition.y-1 >= 1	&&
 				   _NewPosition.x-1 >= 1 	&&
-				   _NewPosition.x+1 < taille-1	){
+				   _NewPosition.x+1 < 200-1	){
 					if((_TownTable[		_NewPosition.x+1,	_NewPosition.y-1 ] 	!= -2000 && _TownTable[_NewPosition.x+1,	_NewPosition.y-1 ] 	!= 1 ) &&
 					   (_TownTable[		_NewPosition.x,		_NewPosition.y-1 ] 	!= -2000 && _TownTable[_NewPosition.x,		_NewPosition.y-1 ] 	!= 1 ) &&
 					   (_TownTable[		_NewPosition.x-1,	_NewPosition.y-1 ] 	!= -2000 && _TownTable[_NewPosition.x-1,	_NewPosition.y-1 ] 	!= 1 ))
