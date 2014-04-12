@@ -8,31 +8,193 @@ public class Quartier : MonoBehaviour {
 
 }
 
-public class quartier {
+public class Ville {
+	public List<quartier> MesQuartier;
+	public int Taille;
 
-	public string Type;
-	public List<Rue> Rues = new List<Rue>();
-	
-	public quartier(int _position_x,
-	                int _position_y,
-	                int _taille_X,
-	                int _taille_Y,
-	                string _type) {
-
-		this.Type = _type;
-		this.Rues = null;
+	public Ville(){
+		this.MesQuartier = new List<quartier>();
+		this.Taille = 0;
 	}
-	
+
+	public void AjouterQuartier(quartier new_quartier){
+		this.MesQuartier.Add(new_quartier);
+		this.Taille ++;
+	}
+
 }
 
-public class Rue {
+public class quartier {
+
+	public int Type;
+	public int Taille;
+	public List<Position> MyPositions;
+	public List<Position> MesRoutesPrimaires;
+	public List<Position> MesRoutesSecondaires;
 	
-	public Position Begin;
-	public Position End;
+	public quartier(int _Type) {
+		this.Type = _Type;
+		this.Taille = 0;
+		this.MyPositions = new List<Position>();
+	}
+
+	public void AddPosition(Position _pos){
+		if(MyPositions.Contains(_pos)){
+			Debug.LogError("mon quartier contient déja cette position");
+		}
+		else{
+			MyPositions.Add(_pos);
+			this.Taille ++;
+		}
+	}
+
+	public void RemovePosition(Position _pos){
+		if(MyPositions.Contains(_pos)){
+			MyPositions.Remove(_pos);
+		}
+		else{
+			Debug.LogError("mon quartier ne possède pas cette position");
+			MyPositions.Add(_pos);
+			this.Taille --;
+		}
+	}
+
+	public void AddRoutePrimaire(Position _pos){
+		if(MesRoutesPrimaires.Contains(_pos)){
+			Debug.LogError("mon quartier contient déja cette route");
+		}
+		else{
+			MesRoutesPrimaires.Add(_pos);
+		}
+	}
+
+	public void RemoveRoutePrimaire(Position _pos){
+		if(MesRoutesPrimaires.Contains(_pos)){
+			MesRoutesPrimaires.Remove(_pos);
+		}
+		else{
+			Debug.LogError("mon quartier ne contient pas cette route");
+		}
+	}
+
+	public void AddRouteSecondaire(Position _pos){
+		if(!MesRoutesSecondaires.Contains(_pos)){
+
+			MesRoutesSecondaires.Add(_pos);
+		}
+	}
 	
-	public Rue(Position _begin, Position _End){
-		this.Begin = _begin;
-		this.End = _End;
+	public void RemoveRouteSecondaire(Position _pos){
+		if(MesRoutesSecondaires.Contains(_pos)){
+			MesRoutesSecondaires.Remove(_pos);
+		}
+		else{
+			Debug.LogError("mon quartier ne contient pas cette route");
+		}
+	}
+
+	public Position FindSisterRoad(Position _ActualPosition){
+		//verifier avant tout que la position fait partie de la route
+
+
+		List<Position> _Nord = new List<Position>();
+		List<Position> _Est = new List<Position>();
+		List<Position> _Ouest = new List<Position>();
+		List<Position> _Sud = new List<Position>();
+
+		//on recupère toutes les positions du quartier sur les 4 cardinaux
+		foreach( Position p in this.MesRoutesPrimaires){
+			if( p.x == _ActualPosition.x ){
+				if(p.y > _ActualPosition.y){
+					_Sud.Add(p);
+				}
+				if(p.y < _ActualPosition.y){
+					_Nord.Add(p);
+				}
+			}
+			if(p.y == _ActualPosition.y){
+				if(p.x > _ActualPosition.x){
+					_Est.Add(p);
+				}
+				if(p.x < _ActualPosition.x){
+					_Ouest.Add(p);
+				}
+			}
+		}
+
+		bool N = false;
+		bool E = false;
+		bool S = false;
+		bool O = false;
+		bool _N_Tested = false;
+		bool _S_Tested = false;
+		bool _O_Tested = false;
+		bool _E_Tested = false;
+		Position _result = new Position();
+		do{
+			int _random = UnityEngine.Random.Range(0,5);
+
+			//nord
+			if(_random == 1){
+				if(_Nord.Count > 0){
+					_result.SetPosition(_Nord[0]);
+					foreach (Position i in _Nord){
+						if(i.x > _result.x){
+							_result.SetPosition(i);
+						}
+					}
+					N = true;
+				}
+				_N_Tested = true;
+			}
+
+			//sud
+			if(_random == 2){
+				if(_Nord.Count > 0){
+					_result = _Sud[0];
+					foreach (Position i in _Nord){
+						if(i.x < _result.x){
+							_result.SetPosition(i);
+						}
+					}
+					S = true;
+				}
+				_S_Tested = true;
+			}
+
+			//Ouest
+			if(_random == 3){
+				if(_Ouest.Count > 0){
+					_result = _Ouest[0];
+					foreach (Position i in _Nord){
+						if(i.y < _result.y){
+							_result.SetPosition(i);
+						}
+					}
+					O = true;
+				}
+				_O_Tested = true;
+			}
+
+			//Est
+			if(_random == 4){
+				if(_Est.Count > 0){
+					_result = _Est[0];
+					foreach (Position i in _Nord){
+						if(i.y > _result.y){
+							_result.SetPosition(i);
+						}
+					}
+					E = true;
+				}
+				_E_Tested = true;
+			}
+
+
+		}while( N || E || S || O || (_N_Tested && _S_Tested && _O_Tested && _E_Tested));
+
+		return _result;
+
 	}
 	
 }
@@ -73,18 +235,6 @@ public class Position {
 	public void SetPosition(int i, int j){
 		this.x = i;
 		this.y = j;
-	}
-	
-}
-
-public class Taille {
-	public int x;
-	public int y;
-	
-	Taille(int _x,
-	       int _y){
-		this.x = _x;
-		this.y = _y;
 	}
 	
 }
