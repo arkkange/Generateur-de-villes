@@ -129,7 +129,7 @@ public class quartier {
 
 		//on recupère toutes les positions du quartier sur les 4 cardinaux
 		foreach( Position _p in this.MesRoutesPrimaires){
-			Debug.Log(this.TailleRoutesP);
+
 			if(this.TailleRoutesP > 1){
 				if( _p.x == _ActualPosition.x ){
 					if(_p.y > _ActualPosition.y){

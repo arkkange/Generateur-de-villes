@@ -178,8 +178,6 @@ public class TownGenerator : MonoBehaviour {
 		//recuperation d'une position d'arrivée possible
 		_PositionFin = _QuartierCourant.FindSisterRoad(_PositionDeDepart, _direction);
 
-		/*
-
 		//si la route possède un voie possible
 		if( !(_PositionFin.Equals(_referencePos) ) ){
 			//calcul la taille de la route maximum
@@ -256,8 +254,6 @@ public class TownGenerator : MonoBehaviour {
 
 
 		}
-
-		*/
 
 		return _CheminEstCorrect;
 
