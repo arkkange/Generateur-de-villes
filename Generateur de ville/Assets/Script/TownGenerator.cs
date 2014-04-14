@@ -4,6 +4,11 @@ using System;
 
 public class TownGenerator : MonoBehaviour {
 
+
+	//caracter controller
+	[SerializeField]
+	Transform _character_controller;
+
 	//routes
 	[SerializeField]
 	Transform _route_droite;
@@ -95,6 +100,13 @@ public class TownGenerator : MonoBehaviour {
 			_position_is_road = false;
 			Position _position= new Position();
 
+			//first point of the City
+			_position.SetPosition(taille/2,taille/2);
+			for(int j=0; j<4;j++){
+				RoadCreation(_position, _TownTable, taille);
+			}
+
+
 			do{
 				//generation aleatoire de point de depart de la route
 				int _x = UnityEngine.Random.Range(taille/2 , taille/2 + taille/4);
@@ -171,6 +183,11 @@ public class TownGenerator : MonoBehaviour {
 		//instanciations de tous les objets dans la scène
 		Instanciate(_TownTable);
 
+		//ajout du charachter controller
+		Vector3 position = new Vector3(taille/2,0.30f,taille/2);
+		Quaternion rotation = _character_controller.rotation;
+		Instantiate(_character_controller,position,rotation);
+		
 	}
 	
 	/*
