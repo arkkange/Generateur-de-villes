@@ -141,6 +141,7 @@ public class quartier {
 		foreach( Position _p in this.MesRoutesPrimaires){
 
 			if(this.TailleRoutesP > 1){
+				Debug.Log (TailleRoutesP);
 				if( _p.x == _ActualPosition.x ){
 					if(_p.y > _ActualPosition.y){
 						Sud.Add(_p);

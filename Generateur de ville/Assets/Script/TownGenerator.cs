@@ -4,6 +4,7 @@ using System;
 
 public class TownGenerator : MonoBehaviour {
 
+	//routes
 	[SerializeField]
 	Transform _route_droite;
 
@@ -18,6 +19,9 @@ public class TownGenerator : MonoBehaviour {
 
 	[SerializeField]
 	Transform _route_cul_de_sac;
+
+	[SerializeField]
+	Transform _route_secondaire;
 
 	[SerializeField]
 	Transform _Centre_commercial;
@@ -138,8 +142,9 @@ public class TownGenerator : MonoBehaviour {
 		int numeroCase = _TownTable[5,5];
 		MettreAZero(5,5,numeroCase);
 
+		/*
 
-			//generation des routes secondaires (pas de soucis)
+		//generation des routes secondaires (pas de soucis)
 		for(int i=0; i< _NotreVille.Taille ; i++){
 			quartier _QuartierCourant = new quartier(_NotreVille.MesQuartier[i]);
 
@@ -159,6 +164,8 @@ public class TownGenerator : MonoBehaviour {
 			}
 
 		}
+
+		*/
 
 
 		//instanciations de tous les objets dans la scène
@@ -261,6 +268,7 @@ public class TownGenerator : MonoBehaviour {
 					   _TownTable[i,_PositionFin.x+1] != 2 && _TownTable[i,_PositionFin.x+1] != 1 &&
 					   _TownTable[i,_PositionFin.x-1] != 2 && _TownTable[i,_PositionFin.x-1] != 1 )
 					{
+						Debug.Log ("generation d'une porotion de route realisée");
 						_TownTable[i,_PositionFin.y] = 2;
 						_CheminEstCorrect = true;
 					}
@@ -272,7 +280,7 @@ public class TownGenerator : MonoBehaviour {
 				_taille_finale = _taille_chemin_maximum;//UnityEngine.Random.Range(1 , _taille_chemin_maximum+1);
 
 				//tracé de la route vers l'est
-				for(int i = _PositionDeDepart.y-1; i >= (_PositionDeDepart.x - _taille_finale) ; i--){
+				for(int i = _PositionDeDepart.y-1; i > (_PositionDeDepart.x - _taille_finale) ; i--){
 					if(_TownTable[i,_PositionFin.x]   != 2 && _TownTable[i,_PositionFin.x] 	 != 1 &&
 					   _TownTable[i,_PositionFin.x+1] != 2 && _TownTable[i,_PositionFin.x+1] != 1 &&
 					   _TownTable[i,_PositionFin.x-1] != 2 && _TownTable[i,_PositionFin.x-1] != 1 )
@@ -763,7 +771,7 @@ public class TownGenerator : MonoBehaviour {
 		for (int j=0 ; j < taille ; j++){
 			for (int k=0 ; k < taille ; k++){
 				
-				if(Table[j,k] == 1 || Table[j,k] == 2){
+				if(Table[j,k] == 1 /*|| Table[j,k] == 2*/){
 					//pas afficher les routes des bords
 					if( !(j == 0 || k == 0 || k >= taille-1 || j >= taille-1 ) )
 					{	
@@ -775,6 +783,10 @@ public class TownGenerator : MonoBehaviour {
 				if(Table[j,k] == 2)
 				{
 					//dessin des routes secondaires
+					Vector3 position = new Vector3(j,0,k);
+					Quaternion rotation = _route_secondaire.rotation;
+					Instantiate(_route_secondaire,position,rotation);
+
 					
 				}
 				if(Table[j,k] == 15)
