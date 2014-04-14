@@ -135,11 +135,16 @@ public class TownGenerator : MonoBehaviour {
 
 		//ci dessous pas d'erreur
 
-		//generation des routes secondaires (pas de soucis)
-		foreach (quartier _QuartierCourant in _NotreVille.MesQuartier){
-			//pour chaque quartier de notre ville on cré un certain nombre de routes dépendant de la taille du quartier
-			GenererRouteSecondaire(_QuartierCourant, _TownTable);
+		try{
+			//generation des routes secondaires (pas de soucis)
+			foreach (quartier _QuartierCourant in _NotreVille.MesQuartier){
+				//pour chaque quartier de notre ville on cré un certain nombre de routes dépendant de la taille du quartier
+				GenererRouteSecondaire(_QuartierCourant, _TownTable);
+			}
+		}catch(Exception e){
+			Debug.Log (e);
 		}
+
 
 		//instanciations de tous les objets dans la scène
 		Instanciate(_TownTable);
@@ -166,7 +171,7 @@ public class TownGenerator : MonoBehaviour {
 		Debug.Log (_indiceRoute);
 
 		//recupère la position de la route a la position _indiceRoute
-		Position _PositionDeDepart = new Position( );
+		Position _PositionDeDepart = new Position();
 		_PositionDeDepart.SetPosition(_QuartierCourant.MesRoutesPrimaires[_indiceRoute]);
 
 		//recuperation d'une position d'arrivée possible
