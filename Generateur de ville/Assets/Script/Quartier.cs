@@ -133,7 +133,7 @@ public class quartier {
 		this.Ouest.Clear();
 	}
 
-	public Position FindSisterRoad(Position _ActualPosition, string _direction){
+	public Position FindSisterRoad(Position _ActualPosition){
 
 		ClearTableGeneration();
 
@@ -143,20 +143,19 @@ public class quartier {
 			if(this.TailleRoutesP > 1){
 				if( _p.x == _ActualPosition.x ){
 					if(_p.y > _ActualPosition.y){
-						//this.Sud.Add(_p);
-
+						Sud.Add(_p);
 					}
 					if(_p.y < _ActualPosition.y){
-						this.Nord.Add(_p);
+						Nord.Add(_p);
 					}
 				}
 
 				if(_p.y == _ActualPosition.y){
 					if(_p.x > _ActualPosition.x){
-						this.Est.Add(_p);
+						Est.Add(_p);
 					}
 					if(_p.x < _ActualPosition.x){
-						this.Ouest.Add(_p);
+						Ouest.Add(_p);
 					}
 				}
 			}
@@ -173,7 +172,6 @@ public class quartier {
 		bool _E_Tested = false;
 		Position _result = new Position();
 
-
 		do{
 			int _random = UnityEngine.Random.Range(1,5);
 
@@ -182,11 +180,11 @@ public class quartier {
 				if(Nord.Count > 0){
 					_result.SetPosition(Nord[0]);
 					foreach (Position i in Nord){
-						if(i.x > _result.x){
+						if( i.x > _result.x){
 							_result.SetPosition(i);
-							_direction = "N";
 						}
 					}
+
 					N = true;
 				}
 				_N_Tested = true;
@@ -199,7 +197,7 @@ public class quartier {
 					foreach (Position i in Nord){
 						if(i.x < _result.x){
 							_result.SetPosition(i);
-							_direction = "S";
+							//_direction = "S";
 						}
 					}
 					S = true;
@@ -214,7 +212,7 @@ public class quartier {
 					foreach (Position i in Nord){
 						if(i.y < _result.y){
 							_result.SetPosition(i);
-							_direction = "O";
+							//_direction = "O";
 						}
 					}
 					O = true;
@@ -229,7 +227,7 @@ public class quartier {
 					foreach (Position i in Nord){
 						if(i.y > _result.y){
 							_result.SetPosition(i);
-							_direction = "E";
+							//_direction = "E";
 						}
 					}
 					E = true;
@@ -237,11 +235,8 @@ public class quartier {
 				_E_Tested = true;
 			}
 
+		}while( (!N && !E && !S && !O) && (!_N_Tested && !_S_Tested && !_O_Tested && !_E_Tested) );
 
-		}while( N || E || S || O  || (_N_Tested && _S_Tested && _O_Tested && _E_Tested) );
-
-
-		Debug.Log("it works");
 		return _result;
 
 	}

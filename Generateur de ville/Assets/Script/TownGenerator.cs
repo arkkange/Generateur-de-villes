@@ -142,8 +142,22 @@ public class TownGenerator : MonoBehaviour {
 			//generation des routes secondaires (pas de soucis)
 		for(int i=0; i< _NotreVille.Taille ; i++){
 			quartier _QuartierCourant = new quartier(_NotreVille.MesQuartier[i]);
+
+			bool boucle = false;
+
 			//pour chaque quartier de notre ville on cré un certain nombre de routes dépendant de la taille du quartier
-			GenererRouteSecondaire(_QuartierCourant, _TownTable);
+			if(_QuartierCourant.Taille>20){
+				for(int j =0; j < _QuartierCourant.Taille*10/100; j++){
+					int count = 0;
+					while(!boucle && count < 300){
+
+						boucle = GenererRouteSecondaire(_QuartierCourant, _TownTable);
+						Debug.Log(boucle);
+						count++;
+					}
+				}
+			}
+
 		}
 
 
@@ -159,55 +173,74 @@ public class TownGenerator : MonoBehaviour {
 
 	public bool GenererRouteSecondaire(quartier _QuartierCourant, int[,] _TownTable){
 
-		Position _PositionFin = new Position();
+		Debug.Log(" generation d'une route secondaire ");
+
+		Position _PositionFin= new Position();
+		Position _PositionDeDepart  = new Position();
 		Position _referencePos = new Position();
-		string _direction = "";
 		bool _FoundWay = false;
 		int nb_roads;
 		int max_roads;
 		bool _CheminEstCorrect = false;
+		string _direction ="null";
 
 		//choix aleatoire d'une position de route primaire
 		int _indiceRoute = UnityEngine.Random.Range(0 ,_QuartierCourant.TailleRoutesP);
 
 		//recupère la position de la route a la position _indiceRoute
-		Position _PositionDeDepart = new Position();
-		_PositionDeDepart.SetPosition(_QuartierCourant.MesRoutesPrimaires[_indiceRoute]);
-
+		_PositionDeDepart.SetPosition( _QuartierCourant.MesRoutesPrimaires[_indiceRoute] );
 
 		//recuperation d'une position d'arrivée possible
-		_PositionFin.SetPosition(_QuartierCourant.FindSisterRoad(_PositionDeDepart, _direction));
-
-		/*
+		_PositionFin.SetPosition( _QuartierCourant.FindSisterRoad(_PositionDeDepart ) );
+	
 
 		//si la route possède un voie possible
 		if( !(_PositionFin.Equals(_referencePos) ) ){
-			Debug.Log(" generation d'une route secondaire ");
+			Debug.Log(" positon fin != position courante ");
+
+			//calcul de la direction
+			if( _PositionFin.x > _PositionDeDepart.x){
+				_direction = "S";
+			}
+			else if( _PositionFin.x < _PositionDeDepart.x ){
+				_direction = "N";
+			}
+			else if( _PositionFin.y > _PositionDeDepart.y ){
+				_direction = "E";
+			}
+			else if( _PositionFin.y < _PositionDeDepart.y){
+				_direction = "W";
+			}
+			else{
+				Debug.Log ("error de direction de la route secondaire");
+			}
+
 			//calcul la taille de la route maximum
 			int _taille_chemin_maximum = 0;
 			int _taille_finale = 0;
 
 			if(_direction == "N" ){
-				_taille_chemin_maximum = _PositionFin.x - _PositionDeDepart.x -1;
-				_taille_finale = UnityEngine.Random.Range(1 , _taille_chemin_maximum+1);
+				_taille_chemin_maximum = _PositionFin.x - _PositionDeDepart.x-1;
+				_taille_finale = _taille_chemin_maximum;//UnityEngine.Random.Range(1 , _taille_chemin_maximum+1);
 
 				//test si le tracé est correct et trace
-				for(int i = _PositionDeDepart.x-1; i == (_PositionDeDepart.x - _taille_finale) ; i--){
+				for(int i = _PositionDeDepart.x-1; i >= (_PositionDeDepart.x - _taille_finale) ; i--){
 					if(_TownTable[i,_PositionFin.y]   != 2 && _TownTable[i,_PositionFin.y] 	 != 1 &&
 					   _TownTable[i,_PositionFin.y+1] != 2 && _TownTable[i,_PositionFin.y+1] != 1 &&
 					   _TownTable[i,_PositionFin.y-1] != 2 && _TownTable[i,_PositionFin.y-1] != 1 )
 					{
 						_TownTable[i,_PositionFin.y] = 2;
 						_CheminEstCorrect = true;
+
 					}
 				}
 
 			}
 			else if( _direction == "S"){
 				_taille_chemin_maximum = _PositionDeDepart.x - _PositionFin.x -1;
-				_taille_finale = UnityEngine.Random.Range(1 , _taille_chemin_maximum+1);
+				_taille_finale = _taille_chemin_maximum;//UnityEngine.Random.Range(1 , _taille_chemin_maximum+1);
 
-				for(int i = _PositionDeDepart.x+1; i == (_PositionDeDepart.x + _taille_finale) ; i++){
+				for(int i = _PositionDeDepart.x+1; i <= (_PositionDeDepart.x + _taille_finale) ; i++){
 					if(_TownTable[i,_PositionFin.y]   != 2 && _TownTable[i,_PositionFin.y] 	 != 1 &&
 					   _TownTable[i,_PositionFin.y+1] != 2 && _TownTable[i,_PositionFin.y+1] != 1 &&
 					   _TownTable[i,_PositionFin.y-1] != 2 && _TownTable[i,_PositionFin.y-1] != 1 )
@@ -220,36 +253,32 @@ public class TownGenerator : MonoBehaviour {
 			}
 			else if(_direction == "E"){
 				_taille_chemin_maximum = _PositionFin.y - _PositionDeDepart.y -1;
-				_taille_finale = UnityEngine.Random.Range(1 , _taille_chemin_maximum+1);
+				_taille_finale = _taille_chemin_maximum;//UnityEngine.Random.Range(1 , _taille_chemin_maximum+1);
 
-				if(_CheminEstCorrect){
-					//tracé de la route vers l'est
-					for(int i = _PositionDeDepart.y+1; i == (_PositionDeDepart.x + _taille_finale) ; i++){
-						if(_TownTable[i,_PositionFin.x]   != 2 && _TownTable[i,_PositionFin.x] 	 != 1 &&
-						   _TownTable[i,_PositionFin.x+1] != 2 && _TownTable[i,_PositionFin.x+1] != 1 &&
-						   _TownTable[i,_PositionFin.x-1] != 2 && _TownTable[i,_PositionFin.x-1] != 1 )
-						{
-							_TownTable[i,_PositionFin.y] = 2;
-							_CheminEstCorrect = true;
-						}
+				//tracé de la route vers l'est
+				for(int i = _PositionDeDepart.y+1; i <= (_PositionDeDepart.x + _taille_finale) ; i++){
+					if(_TownTable[i,_PositionFin.x]   != 2 && _TownTable[i,_PositionFin.x] 	 != 1 &&
+					   _TownTable[i,_PositionFin.x+1] != 2 && _TownTable[i,_PositionFin.x+1] != 1 &&
+					   _TownTable[i,_PositionFin.x-1] != 2 && _TownTable[i,_PositionFin.x-1] != 1 )
+					{
+						_TownTable[i,_PositionFin.y] = 2;
+						_CheminEstCorrect = true;
 					}
 				}
 
 			}
 			else if( _direction == "W"){
 				_taille_chemin_maximum = _PositionDeDepart.y - _PositionFin.y -1;
-				_taille_finale = UnityEngine.Random.Range(1 , _taille_chemin_maximum+1);
+				_taille_finale = _taille_chemin_maximum;//UnityEngine.Random.Range(1 , _taille_chemin_maximum+1);
 
-				if(_CheminEstCorrect){
-					//tracé de la route vers l'est
-					for(int i = _PositionDeDepart.y-1; i == (_PositionDeDepart.x - _taille_finale) ; i--){
-						if(_TownTable[i,_PositionFin.x]   != 2 && _TownTable[i,_PositionFin.x] 	 != 1 &&
-						   _TownTable[i,_PositionFin.x+1] != 2 && _TownTable[i,_PositionFin.x+1] != 1 &&
-						   _TownTable[i,_PositionFin.x-1] != 2 && _TownTable[i,_PositionFin.x-1] != 1 )
-						{
-							_TownTable[i,_PositionFin.y] = 2;
-							_CheminEstCorrect = true;
-						}
+				//tracé de la route vers l'est
+				for(int i = _PositionDeDepart.y-1; i >= (_PositionDeDepart.x - _taille_finale) ; i--){
+					if(_TownTable[i,_PositionFin.x]   != 2 && _TownTable[i,_PositionFin.x] 	 != 1 &&
+					   _TownTable[i,_PositionFin.x+1] != 2 && _TownTable[i,_PositionFin.x+1] != 1 &&
+					   _TownTable[i,_PositionFin.x-1] != 2 && _TownTable[i,_PositionFin.x-1] != 1 )
+					{
+						_TownTable[i,_PositionFin.y] = 2;
+						_CheminEstCorrect = true;
 					}
 				}
 				
@@ -257,8 +286,6 @@ public class TownGenerator : MonoBehaviour {
 
 
 		}
-
-		*/
 
 		return _CheminEstCorrect;
 
