@@ -168,17 +168,20 @@ public class TownGenerator : MonoBehaviour {
 
 		//choix aleatoire d'une position de route primaire
 		int _indiceRoute = UnityEngine.Random.Range(0 ,_QuartierCourant.TailleRoutesP);
-		Debug.Log (_indiceRoute);
+		//Debug.Log (_indiceRoute);
 
 		//recupère la position de la route a la position _indiceRoute
 		Position _PositionDeDepart = new Position();
 		_PositionDeDepart.SetPosition(_QuartierCourant.MesRoutesPrimaires[_indiceRoute]);
 
+
 		//recuperation d'une position d'arrivée possible
 		_PositionFin = _QuartierCourant.FindSisterRoad(_PositionDeDepart, _direction);
 
+		/*
+
 		//si la route possède un voie possible
-		if( ! _PositionFin.Equals(_referencePos) ){
+		if( !(_PositionFin.Equals(_referencePos) ) ){
 			//calcul la taille de la route maximum
 			int _taille_chemin_maximum = 0;
 			int _taille_finale = 0;
@@ -253,6 +256,8 @@ public class TownGenerator : MonoBehaviour {
 
 
 		}
+
+		*/
 
 		return _CheminEstCorrect;
 

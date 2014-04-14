@@ -32,6 +32,12 @@ public class quartier {
 	public List<Position> MyPositions;			//les positions qui composent le quartier	
 	public List<Position> MesRoutesPrimaires;	//positions des routes primaires
 	public List<Position> MesRoutesSecondaires;	//positions des routes secondaires
+
+	//pour generation des routes secondaire
+	public List<Position> _Nord = new List<Position>();
+	public List<Position> _Est = new List<Position>();
+	public List<Position> _Ouest = new List<Position>();
+	public List<Position> _Sud = new List<Position>();
 	
 	public quartier(int _Type) {
 		this.Type = _Type;
@@ -40,6 +46,11 @@ public class quartier {
 		this.MyPositions = new List<Position>();
 		this.MesRoutesPrimaires = new List<Position>();
 		this.MesRoutesSecondaires = new List<Position>();
+
+		_Nord = new List<Position>();
+		_Est = new List<Position>();
+		_Ouest = new List<Position>();
+		_Sud = new List<Position>();
 	}
 
 	public Position GetPositionRouteP(int indice){
@@ -105,31 +116,36 @@ public class quartier {
 		}
 	}
 
+	public void ClearTableGeneration(){
+		this._Sud.Clear();
+		this._Nord.Clear();
+		this._Est.Clear();
+		this._Ouest.Clear();
+	}
+
 	public Position FindSisterRoad(Position _ActualPosition, string _direction){
 		//verifier avant tout que la position fait partie de la route
 
 
-		List<Position> _Nord = new List<Position>();
-		List<Position> _Est = new List<Position>();
-		List<Position> _Ouest = new List<Position>();
-		List<Position> _Sud = new List<Position>();
-
 		//on recupère toutes les positions du quartier sur les 4 cardinaux
-		foreach( Position p in this.MesRoutesPrimaires){
-			if( p.x == _ActualPosition.x ){
-				if(p.y > _ActualPosition.y){
-					_Sud.Add(p);
+		foreach( Position _p in this.MesRoutesPrimaires){
+			Debug.Log(this.TailleRoutesP);
+			if(this.TailleRoutesP > 1){
+				if( _p.x == _ActualPosition.x ){
+					if(_p.y > _ActualPosition.y){
+						this._Sud.Add(_p);
+					}
+					if(_p.y < _ActualPosition.y){
+						this._Nord.Add(_p);
+					}
 				}
-				if(p.y < _ActualPosition.y){
-					_Nord.Add(p);
-				}
-			}
-			if(p.y == _ActualPosition.y){
-				if(p.x > _ActualPosition.x){
-					_Est.Add(p);
-				}
-				if(p.x < _ActualPosition.x){
-					_Ouest.Add(p);
+				if(_p.y == _ActualPosition.y){
+					if(_p.x > _ActualPosition.x){
+						this._Est.Add(_p);
+					}
+					if(_p.x < _ActualPosition.x){
+							this._Ouest.Add(_p);
+					}
 				}
 			}
 		}
@@ -143,8 +159,9 @@ public class quartier {
 		bool _O_Tested = false;
 		bool _E_Tested = false;
 		Position _result = new Position();
+
 		do{
-			int _random = UnityEngine.Random.Range(0,5);
+			int _random = UnityEngine.Random.Range(1,5);
 
 			//nord
 			if(_random == 1){
@@ -207,8 +224,9 @@ public class quartier {
 			}
 
 
-		}while( N || E || S || O || (_N_Tested && _S_Tested && _O_Tested && _E_Tested));
+		}while( N || E || S || O  || (_N_Tested && _S_Tested && _O_Tested && _E_Tested) );
 
+		this.ClearTableGeneration();
 		return _result;
 
 	}
