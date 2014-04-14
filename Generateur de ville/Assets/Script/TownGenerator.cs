@@ -123,8 +123,13 @@ public class TownGenerator : MonoBehaviour {
 					//generation du nouveau quartier (a partir des routes tracées)
 					creerQuartier(j,k,typeQuartier, _Nouveau_Quartier);
 
+
+					//nouvelle instance de quartier copiée afin de l'ajouter a la ville
+					quartier _UnQuartier = new quartier( _Nouveau_Quartier );
+
 					//Ajout du quartier a la ville
-					_NotreVille.AjouterQuartier(_Nouveau_Quartier);
+					_NotreVille.AjouterQuartier(_UnQuartier);
+
 				}
 			}
 		}
@@ -133,16 +138,12 @@ public class TownGenerator : MonoBehaviour {
 		int numeroCase = _TownTable[5,5];
 		MettreAZero(5,5,numeroCase);
 
-		//ci dessous pas d'erreur
 
-		try{
 			//generation des routes secondaires (pas de soucis)
-			foreach (quartier _QuartierCourant in _NotreVille.MesQuartier){
-				//pour chaque quartier de notre ville on cré un certain nombre de routes dépendant de la taille du quartier
-				GenererRouteSecondaire(_QuartierCourant, _TownTable);
-			}
-		}catch(Exception e){
-			Debug.Log (e);
+		for(int i=0; i< _NotreVille.Taille ; i++){
+			quartier _QuartierCourant = new quartier(_NotreVille.MesQuartier[i]);
+			//pour chaque quartier de notre ville on cré un certain nombre de routes dépendant de la taille du quartier
+			GenererRouteSecondaire(_QuartierCourant, _TownTable);
 		}
 
 
@@ -168,7 +169,6 @@ public class TownGenerator : MonoBehaviour {
 
 		//choix aleatoire d'une position de route primaire
 		int _indiceRoute = UnityEngine.Random.Range(0 ,_QuartierCourant.TailleRoutesP);
-		//Debug.Log (_indiceRoute);
 
 		//recupère la position de la route a la position _indiceRoute
 		Position _PositionDeDepart = new Position();
@@ -176,10 +176,13 @@ public class TownGenerator : MonoBehaviour {
 
 
 		//recuperation d'une position d'arrivée possible
-		_PositionFin = _QuartierCourant.FindSisterRoad(_PositionDeDepart, _direction);
+		_PositionFin.SetPosition(_QuartierCourant.FindSisterRoad(_PositionDeDepart, _direction));
+
+		/*
 
 		//si la route possède un voie possible
 		if( !(_PositionFin.Equals(_referencePos) ) ){
+			Debug.Log(" generation d'une route secondaire ");
 			//calcul la taille de la route maximum
 			int _taille_chemin_maximum = 0;
 			int _taille_finale = 0;
@@ -255,6 +258,8 @@ public class TownGenerator : MonoBehaviour {
 
 		}
 
+		*/
+
 		return _CheminEstCorrect;
 
 	}
@@ -312,6 +317,7 @@ public class TownGenerator : MonoBehaviour {
 			}
 		}
 	}
+
 
 	//julien : j'ai modifié ce script pour qu'il remplisse la classe quartier (qui sert a créer les routes secondaires)
 	public void creerQuartier(int x, int y, int type, quartier _Nouveau_Quartier)
@@ -416,8 +422,6 @@ public class TownGenerator : MonoBehaviour {
 			//si la position n'as pas changée on stop le roading sinon on road
 			if( _NewPosition.Equals(_ActualPosition) ){
 				_roading = false;
-				//debug.Log("end of road because new position equals actual position");
-				//debug.Log("_NewPosition : "+_NewPosition.x+","+_NewPosition.y+" & _ActualPosition : "+_ActualPosition.x+","+_ActualPosition.y);
 			}
 			else{
 				//roader (c'est a dire ajouter la route au tableau
@@ -432,6 +436,7 @@ public class TownGenerator : MonoBehaviour {
 	}
 
 	void DessinerRoute(int j, int k,int[,] _TownTable){
+
 		Position _thisPosition = new Position(j,k);
 		
 		//routes droite
@@ -561,7 +566,7 @@ public class TownGenerator : MonoBehaviour {
 		}
 		else{
 			
-			Debug.Log ("erreur pas de generation : ("+_thisPosition.x+","+_thisPosition.y+")");
+			//Debug.Log ("erreur pas de generation : ("+_thisPosition.x+","+_thisPosition.y+")");
 		}
 		
 	}
@@ -603,7 +608,7 @@ public class TownGenerator : MonoBehaviour {
 		}
 		else{
 			return false;
-			Debug.Log("erreur fonction : cette direction n'existe pas !");
+			//Debug.Log("erreur fonction : cette direction n'existe pas !");
 		}
 		
 	}
