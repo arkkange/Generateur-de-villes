@@ -108,7 +108,6 @@ public class TownGenerator : MonoBehaviour {
 		Ville _NotreVille = new Ville();
 
 		//generation des quartiers
-
 		for(int j = 0; j < taille - 1; j++)
 		{
 			for(int k = 0; k < taille - 1; k++)
@@ -129,13 +128,17 @@ public class TownGenerator : MonoBehaviour {
 				}
 			}
 		}
+
+		//mettre a zero les contour de la ville
 		int numeroCase = _TownTable[5,5];
 		MettreAZero(5,5,numeroCase);
 
-		//generation des routes secondaires
+		//ci dessous pas d'erreur
+
+		//generation des routes secondaires (pas de soucis)
 		foreach (quartier _QuartierCourant in _NotreVille.MesQuartier){
 			//pour chaque quartier de notre ville on cré un certain nombre de routes dépendant de la taille du quartier
-			//GenererRouteSecondaire(_QuartierCourant);
+			GenererRouteSecondaire(_QuartierCourant, _TownTable);
 		}
 
 		//instanciations de tous les objets dans la scène
@@ -148,13 +151,105 @@ public class TownGenerator : MonoBehaviour {
 	 * 
 	 */
 
-	public bool GenererRouteSecondaire(quartier _QuartierCourant){
-		//choix aleatoire d'une position de route primaire
-		int _indiceRoute = UnityEngine.Random.Range(0 ,_QuartierCourant.MesRoutesPrimaires.Count -1);
-		//recupère la position de la route a la position _indiceRoute
-		Position _PositionDeDepart = new Position( _QuartierCourant.MesRoutesPrimaires[_indiceRoute] );
+	public bool GenererRouteSecondaire(quartier _QuartierCourant, int[,] _TownTable){
 
-		return true;
+		Position _PositionFin = new Position();
+		Position _referencePos = new Position();
+		string _direction = "";
+		bool _FoundWay = false;
+		int nb_roads;
+		int max_roads;
+		bool _CheminEstCorrect = false;
+
+		//choix aleatoire d'une position de route primaire
+		int _indiceRoute = UnityEngine.Random.Range(0 ,_QuartierCourant.TailleRoutesP);
+		Debug.Log (_indiceRoute);
+
+		//recupère la position de la route a la position _indiceRoute
+		Position _PositionDeDepart = new Position( );
+		_PositionDeDepart.SetPosition(_QuartierCourant.MesRoutesPrimaires[_indiceRoute]);
+
+		//recuperation d'une position d'arrivée possible
+		_PositionFin = _QuartierCourant.FindSisterRoad(_PositionDeDepart, _direction);
+
+		//si la route possède un voie possible
+		if( ! _PositionFin.Equals(_referencePos) ){
+			//calcul la taille de la route maximum
+			int _taille_chemin_maximum = 0;
+			int _taille_finale = 0;
+
+			if(_direction == "N" ){
+				_taille_chemin_maximum = _PositionFin.x - _PositionDeDepart.x -1;
+				_taille_finale = UnityEngine.Random.Range(1 , _taille_chemin_maximum+1);
+
+				//test si le tracé est correct et trace
+				for(int i = _PositionDeDepart.x-1; i == (_PositionDeDepart.x - _taille_finale) ; i--){
+					if(_TownTable[i,_PositionFin.y]   != 2 && _TownTable[i,_PositionFin.y] 	 != 1 &&
+					   _TownTable[i,_PositionFin.y+1] != 2 && _TownTable[i,_PositionFin.y+1] != 1 &&
+					   _TownTable[i,_PositionFin.y-1] != 2 && _TownTable[i,_PositionFin.y-1] != 1 )
+					{
+						_TownTable[i,_PositionFin.y] = 2;
+						_CheminEstCorrect = true;
+					}
+				}
+
+			}
+			else if( _direction == "S"){
+				_taille_chemin_maximum = _PositionDeDepart.x - _PositionFin.x -1;
+				_taille_finale = UnityEngine.Random.Range(1 , _taille_chemin_maximum+1);
+
+				for(int i = _PositionDeDepart.x+1; i == (_PositionDeDepart.x + _taille_finale) ; i++){
+					if(_TownTable[i,_PositionFin.y]   != 2 && _TownTable[i,_PositionFin.y] 	 != 1 &&
+					   _TownTable[i,_PositionFin.y+1] != 2 && _TownTable[i,_PositionFin.y+1] != 1 &&
+					   _TownTable[i,_PositionFin.y-1] != 2 && _TownTable[i,_PositionFin.y-1] != 1 )
+					{
+						_TownTable[i,_PositionFin.y] = 2;
+						_CheminEstCorrect = true;
+					}
+				}
+
+			}
+			else if(_direction == "E"){
+				_taille_chemin_maximum = _PositionFin.y - _PositionDeDepart.y -1;
+				_taille_finale = UnityEngine.Random.Range(1 , _taille_chemin_maximum+1);
+
+				if(_CheminEstCorrect){
+					//tracé de la route vers l'est
+					for(int i = _PositionDeDepart.y+1; i == (_PositionDeDepart.x + _taille_finale) ; i++){
+						if(_TownTable[i,_PositionFin.x]   != 2 && _TownTable[i,_PositionFin.x] 	 != 1 &&
+						   _TownTable[i,_PositionFin.x+1] != 2 && _TownTable[i,_PositionFin.x+1] != 1 &&
+						   _TownTable[i,_PositionFin.x-1] != 2 && _TownTable[i,_PositionFin.x-1] != 1 )
+						{
+							_TownTable[i,_PositionFin.y] = 2;
+							_CheminEstCorrect = true;
+						}
+					}
+				}
+
+			}
+			else if( _direction == "W"){
+				_taille_chemin_maximum = _PositionDeDepart.y - _PositionFin.y -1;
+				_taille_finale = UnityEngine.Random.Range(1 , _taille_chemin_maximum+1);
+
+				if(_CheminEstCorrect){
+					//tracé de la route vers l'est
+					for(int i = _PositionDeDepart.y-1; i == (_PositionDeDepart.x - _taille_finale) ; i--){
+						if(_TownTable[i,_PositionFin.x]   != 2 && _TownTable[i,_PositionFin.x] 	 != 1 &&
+						   _TownTable[i,_PositionFin.x+1] != 2 && _TownTable[i,_PositionFin.x+1] != 1 &&
+						   _TownTable[i,_PositionFin.x-1] != 2 && _TownTable[i,_PositionFin.x-1] != 1 )
+						{
+							_TownTable[i,_PositionFin.y] = 2;
+							_CheminEstCorrect = true;
+						}
+					}
+				}
+				
+			}
+
+
+		}
+
+		return _CheminEstCorrect;
 
 	}
 	
@@ -216,43 +311,63 @@ public class TownGenerator : MonoBehaviour {
 	public void creerQuartier(int x, int y, int type, quartier _Nouveau_Quartier)
 	{
 		_TownTable[x,y] = type;
+
+		//ajout de la position actuelle au tableau de positions
+		Position _newPos = new Position(x,y);
+		_Nouveau_Quartier.AddPosition(_newPos);
+
 		//si on est a la fin du tableau
-		if(x<taille-1)
-		{
+		if(x<taille-1){
 			//si ya une route non principal on vas chercher plus loin!
 			//on renvoie en bas!
-		if(_TownTable[x+1,y] == 0)
-			{
-				creerQuartier(x+1,y,type, _Nouveau_Quartier);
+			if(_TownTable[x+1,y] == 0){
+				creerQuartier(x+1,y, type, _Nouveau_Quartier);
+			}
+			else if(_TownTable[x+1,y] == 1){
+				_newPos.SetPosition(x+1,y);
+				_Nouveau_Quartier.AddRoutePrimaire(_newPos);
 			}
 		}
 		//si on est a la fin du tableau
-		if(y<taille-1)
-		{
+		if(y<taille-1){
+
 			//on renvoie a droite
-			if(_TownTable[x,y+1] == 0)
-			{
+			if(_TownTable[x,y+1] == 0){
 				creerQuartier(x,y+1,type, _Nouveau_Quartier);
 			}
+			else if(_TownTable[x,y+1] == 1){
+				_newPos.SetPosition(x,y+1);
+				_Nouveau_Quartier.AddRoutePrimaire(_newPos);
+			}
+
 		}
 		//si on est au début du tableau
-		if(x>0)
-		{
+		if(x>0){
+
 			//on envoie en haut!
-			if(_TownTable[x-1,y] == 0)
-			{
+			if(_TownTable[x-1,y] == 0){
 				creerQuartier(x-1,y,type, _Nouveau_Quartier);
 			}
+			else if(_TownTable[x-1,y] ==  1){
+				_newPos.SetPosition(x-1,y);
+				_Nouveau_Quartier.AddRoutePrimaire(_newPos);
+			}
+
 		}
 		//si on est au début du tableau
-		if(y>0)
-		{
+		if(y>0){
+
 			//on envoie a gauche!
-			if(_TownTable[x,y-1] == 0)
-			{
+			if(_TownTable[x,y-1] == 0){
 				creerQuartier(x,y-1,type, _Nouveau_Quartier);
 			}
+			else if(_TownTable[x,y-1] == 1){
+				_newPos.SetPosition(x,y-1);
+				_Nouveau_Quartier.AddRoutePrimaire(_newPos);
+			}
+
 		}
+
 	}
 
 	//cette fonction genere une route a l'emplacement donné
